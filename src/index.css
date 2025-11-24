@@ -1,0 +1,161 @@
+/* Fonts first */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Courgette&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap");
+
+/* Then Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Then your custom CSS */
+:root {
+  --accent: #c770c7;
+  --accent-2: #5361;
+}
+
+/* Base tweaks */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+}
+
+.font-dancing {
+  font-family: "Dancing Script", cursive;
+}
+
+/* Tailwind-styled underline for section titles */
+.section-title {
+  position: relative;
+  display: inline-block;
+  font-family: "Dancing Script", cursive;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  width: 75px;
+  height: 0.18rem;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 3.3rem;
+  background-color: var(--accent);
+  border-radius: 999px;
+}
+
+/* Glass / card utilities (advanced layered glass) */
+.glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+}
+
+.glass-strong {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.02)
+  );
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+}
+
+/* Accent helpers */
+.text-accent {
+  color: var(--accent);
+}
+
+.bg-accent-gradient {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.btn-accent {
+  background: linear-gradient(90deg, #c770c7, #6f5cff);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 12px 36px rgba(103, 74, 196, 0.16),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+  transition: transform 0.16s ease, box-shadow 0.16s;
+}
+
+.btn-accent:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px rgba(103, 74, 196, 0.2);
+}
+
+/* Tag / chip */
+.chip {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+/* Progress bar wrapper */
+.progress {
+  background: rgba(255, 255, 255, 0.04);
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #c770c7, #6f5cff);
+  border-radius: 999px;
+}
+
+/* Section titles */
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.section-sub {
+  @apply text-white/80;
+}
+
+/* Featured project card layering */
+.feature-layer {
+  box-shadow: 0 18px 40px rgba(3, 2, 10, 0.6);
+  border-radius: 20px;
+}
+
+/* Portfolio overlay */
+.port-overlay {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.46));
+}
+
+/* small responsiveness */
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: 6.5rem;
+    line-height: 0.82;
+    font-weight: 800;
+  }
+}
+@media (max-width: 767px) {
+  .hero-title {
+    font-size: 3.8rem;
+    line-height: 0.9;
+    font-weight: 800;
+  }
+}
