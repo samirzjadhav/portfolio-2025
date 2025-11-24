@@ -8,9 +8,11 @@ import ProjectsGrid from "./components/ProjectsGrid";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Loader from "./components/Loader";
+import projects from "./data/project";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const [activeProject, setActiveProject] = useState(projects[0]);
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 850);
     return () => clearTimeout(t);
@@ -26,8 +28,8 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6">
           <About />
           <Skills />
-          <FeaturedProject />
-          <ProjectsGrid />
+          <FeaturedProject project={activeProject} />
+          <ProjectsGrid onSelect={setActiveProject} />
           <Contact />
         </div>
       </main>

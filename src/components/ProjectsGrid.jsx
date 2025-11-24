@@ -2,58 +2,64 @@ import React from "react";
 import projects from "../data/project";
 import { motion } from "framer-motion";
 
-export default function ProjectsGrid() {
+export default function ProjectsGrid({ onSelect }) {
   return (
-    <section id="portfolio" className="mt-12">
-      <h3 className="section-title">All Projects</h3>
-      <p className="section-sub mt-2">
-        A selection of recent works — click demo or code for details.
+    <section id="portfolio" className="mt-20">
+      <div className="relative inline-block">
+        <h3 className="section-title">All Projects</h3>
+      </div>
+
+      <p className="section-sub mt-2 text-white/70">
+        Click any project below to preview it above.
       </p>
 
-      <div className="mt-6 grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="mt-10 grid sm:grid-cols-2 md:grid-cols-3 gap-7">
         {projects.map((p) => (
-          <motion.article
+          <motion.div
             key={p.id}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="group relative rounded-xl overflow-hidden glass"
+            onClick={() => onSelect(p)}
+            whileHover={{ scale: 1.05, y: -4 }}
+            className="group cursor-pointer rounded-xl overflow-hidden relative 
+                       bg-[rgba(255,255,255,0.04)] backdrop-blur-lg 
+                       shadow-[0_4px_20px_rgba(0,0,0,0.4)] transition"
           >
             <img
               src={p.img}
               alt={p.title}
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-cover group-hover:opacity-90 transition"
             />
-            <div className="absolute inset-0 flex items-end">
-              <div className="w-full p-4 port-overlay opacity-0 group-hover:opacity-100 transition">
-                <h4 className="text-lg font-semibold">{p.title}</h4>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {p.tags.map((t) => (
-                    <span key={t} className="chip">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-4 flex gap-3">
-                  <a
-                    href={p.demo}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn-accent text-sm"
-                  >
-                    Demo
-                  </a>
-                  <a
-                    href={p.code}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="glass p-2 rounded-md subtle"
-                  >
-                    Code
-                  </a>
-                </div>
+
+            {/* Overlay */}
+            <div
+              className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 
+                            group-hover:opacity-100 transition"
+            ></div>
+
+            <div className="absolute bottom-5 left-5">
+              <h4 className="text-lg font-bold">{p.title}</h4>
+
+              <div className="mt-2 flex flex-wrap gap-2">
+                {p.tags.map((t) => (
+                  <span key={t} className="chip">
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-3 flex gap-3">
+                <a href={p.demo} className="btn-accent text-xs" target="_blank">
+                  Demo
+                </a>
+                <a
+                  href={p.code}
+                  className="glass px-3 py-1 rounded-md text-xs"
+                  target="_blank"
+                >
+                  Code
+                </a>
               </div>
             </div>
-          </motion.article>
+          </motion.div>
         ))}
       </div>
     </section>
