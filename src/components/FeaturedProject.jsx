@@ -10,47 +10,56 @@ export default function FeaturedProject({ project }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false }}
       transition={{ duration: 0.7 }}
-      className="mt-16"
+      className="mt-20"
     >
+      {/* Section Title */}
       <div className="relative inline-block">
         <h3 className="section-title">Featured Project</h3>
       </div>
 
       <div className="mt-10 grid md:grid-cols-2 gap-10 items-center">
-        {/* LEFT — IMAGE */}
+        {/* LEFT — FEATURED IMAGE CARD */}
         <motion.div
-          className="relative rounded-2xl overflow-hidden feature-layer"
+          className="
+            relative rounded-2xl overflow-hidden 
+            bg-white/5 backdrop-blur-xl border border-white/10
+            shadow-[0_12px_50px_rgba(0,0,0,0.5)]
+          "
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
+          {/* Image */}
           <motion.img
             key={project.id}
             initial={{ scale: 1.05, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.9, ease: "easeOut" }}
             src={project.img}
             alt={project.title}
-            className="w-full h-80 object-cover"
+            className="w-full h-80 object-cover rounded-2xl group-hover:scale-105 transition-all duration-500"
           />
 
-          {/* Modern Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 
-          {/* Text on Image */}
-          <div className="absolute bottom-5 left-5">
-            <h4 className="text-2xl font-bold">{project.title}</h4>
-            <p className="text-white/70 text-sm mt-1 max-w-md">
+          {/* TEXT OVERLAY */}
+          <div className="absolute bottom-6 left-6 right-6">
+            <h4 className="text-3xl font-bold tracking-wide">
+              {project.title}
+            </h4>
+
+            <p className="text-white/70 text-sm mt-2 max-w-lg">
               {project.description ||
-                "Clean, modern and responsive — built with React & Tailwind."}
+                "A polished, responsive and modern project built with React & Tailwind."}
             </p>
 
-            <div className="mt-4 flex gap-3">
+            <div className="mt-5 flex gap-4">
               <motion.a
                 href={project.demo}
                 target="_blank"
-                whileHover={{ scale: 1.05 }}
-                className="btn-accent text-sm"
+                whileHover={{ scale: 1.08 }}
+                className="btn-accent text-sm px-4 py-2"
               >
                 Live Demo
               </motion.a>
@@ -58,8 +67,8 @@ export default function FeaturedProject({ project }) {
               <motion.a
                 href={project.code}
                 target="_blank"
-                whileHover={{ scale: 1.05 }}
-                className="glass px-3 py-2 rounded-md text-sm"
+                whileHover={{ scale: 1.08 }}
+                className="glass px-4 py-2 rounded-md text-sm"
               >
                 View Code
               </motion.a>
@@ -67,24 +76,31 @@ export default function FeaturedProject({ project }) {
           </div>
         </motion.div>
 
-        {/* RIGHT — DETAILS */}
-        <div className="glass p-6 rounded-2xl shadow-lg backdrop-blur-xl">
+        {/* RIGHT — DETAILS CARD */}
+        <motion.div
+          initial={{ opacity: 0, x: 25 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="
+            glass p-7 rounded-2xl backdrop-blur-2xl
+            border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.35)]
+          "
+        >
           <h4 className="text-accent font-bold text-xl">Overview</h4>
 
           <p className="section-sub mt-4 leading-relaxed">
             {project.overview ||
-              "This project highlights component structure, responsive UI, animations and reusable modern design patterns."}
+              "This featured project showcases advanced React architecture, responsive UI, animations, and clean reusable components with modern styling."}
           </p>
 
-          <div className="mt-6">
-            <h5 className="font-semibold">Tech Highlights</h5>
-            <ul className="mt-3 space-y-2 text-white/70">
-              {project.tags.map((t) => (
-                <li key={t}>• {t}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
+          <h5 className="font-semibold mt-6 text-lg">Tech Highlights</h5>
+
+          <ul className="mt-3 space-y-2 text-white/70">
+            {project.tags.map((tag, index) => (
+              <li key={index}>• {tag}</li>
+            ))}
+          </ul>
+        </motion.div>
       </div>
     </motion.section>
   );
