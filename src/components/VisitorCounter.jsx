@@ -4,16 +4,18 @@ export default function VisitorCounter() {
   const [visits, setVisits] = useState(0);
 
   useEffect(() => {
-    let total = localStorage.getItem("visit-count");
+    Promise.resolve().then(() => {
+      let total = localStorage.getItem("visit-count");
 
-    if (!total) {
-      total = 1; // first visit
-    } else {
-      total = parseInt(total) + 1;
-    }
+      if (!total) {
+        total = 1;
+      } else {
+        total = parseInt(total) + 1;
+      }
 
-    localStorage.setItem("visit-count", total);
-    setVisits(total);
+      localStorage.setItem("visit-count", total);
+      setVisits(total);
+    });
   }, []);
 
   return (
