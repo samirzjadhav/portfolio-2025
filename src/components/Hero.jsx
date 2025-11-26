@@ -7,7 +7,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="min-h-[90vh] flex items-center bg-cover bg-center bg-no-repeat"
+      className="min-h-[100vh] md:min-h-[90vh] flex items-center bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: `url(${heroBg})`, // <-- APPLY BG HERE
       }}
