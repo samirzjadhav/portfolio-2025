@@ -25,6 +25,10 @@ export default function Navbar() {
           </a>
 
           <nav className="hidden md:flex gap-8 items-center">
+            <a href="/github" className="subtle hover:text-accent transition">
+              GitHub
+            </a>
+
             <a href="#home" className="subtle hover:text-accent transition">
               Home
             </a>
