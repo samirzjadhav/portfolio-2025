@@ -1,7 +1,34 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 import { motion } from "framer-motion";
 
 export default function Contact() {
+  const formRef = useRef();
+  const [status, setStatus] = useState("");
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setStatus("Sending...");
+
+    emailjs
+      .sendForm(
+        "service_5lkxlrk",
+        "template_0qekkyu",
+        formRef.current,
+        "7UnPU1jkPBXvxNS4_"
+      )
+      .then(
+        () => {
+          setStatus("✅ Message sent successfully!");
+          formRef.current.reset();
+        },
+        (error) => {
+          console.error(error);
+          setStatus("❌ Error: Failed to send message.");
+        }
+      );
+  };
+
   return (
     <motion.section
       id="contact"
@@ -12,16 +39,13 @@ export default function Contact() {
       className="mt-20 py-16 px-4 sm:px-6"
     >
       {/* TITLE */}
-      <div className="relative inline-block">
-        <h3 className="section-title text-center sm:text-left">Contact</h3>
-      </div>
-
+      <h3 className="section-title text-center sm:text-left">Contact</h3>
       <p className="section-sub mt-2 text-white/70 text-center sm:text-left">
         Interested in working together? Let’s connect.
       </p>
 
       <div className="mt-14 grid md:grid-cols-2 gap-10">
-        {/* LEFT — CONTACT INFO CARD */}
+        {/* LEFT SIDE CONTACT INFO */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -29,7 +53,6 @@ export default function Contact() {
           className="
             glass p-6 sm:p-8 rounded-2xl backdrop-blur-2xl
             border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
-            flex flex-col justify-center
           "
         >
           <h4 className="text-accent font-bold text-xl sm:text-2xl">
@@ -48,7 +71,6 @@ export default function Contact() {
             </p>
           </div>
 
-          {/* SOCIAL LINKS */}
           <div className="mt-8 flex gap-4">
             <a
               href="https://github.com/samirzjadhav"
@@ -57,7 +79,6 @@ export default function Contact() {
             >
               <i className="bx bxl-github text-2xl"></i>
             </a>
-
             <a
               href="https://linkedin.com/in/samirjadhav"
               target="_blank"
@@ -65,7 +86,6 @@ export default function Contact() {
             >
               <i className="bx bxl-linkedin text-2xl"></i>
             </a>
-
             <a
               href="https://twitter.com/samirzjadhav"
               target="_blank"
@@ -76,10 +96,10 @@ export default function Contact() {
           </div>
         </motion.div>
 
-        {/* RIGHT — FORM CARD */}
+        {/* RIGHT SIDE FORM */}
         <motion.form
-          action="https://getform.io/f/bzylzvva"
-          method="POST"
+          ref={formRef}
+          onSubmit={sendEmail}
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
@@ -89,10 +109,10 @@ export default function Contact() {
             space-y-6
           "
         >
-          {/* NAME + EMAIL */}
+          {/* INPUT GROUP */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <input
-              name="name"
+              name="from_name"
               placeholder="Your Name"
               required
               className="
@@ -103,7 +123,7 @@ export default function Contact() {
             />
 
             <input
-              name="email"
+              name="reply_to"
               type="email"
               placeholder="Email Address"
               required
@@ -115,7 +135,6 @@ export default function Contact() {
             />
           </div>
 
-          {/* MESSAGE BOX */}
           <textarea
             name="message"
             rows="6"
@@ -128,15 +147,16 @@ export default function Contact() {
             "
           ></textarea>
 
-          {/* SEND BUTTON */}
+          {/* STATUS MESSAGE */}
+          {status && (
+            <p className="text-sm text-accent font-medium mt-1">{status}</p>
+          )}
+
           <div className="flex justify-end">
             <motion.button
               whileTap={{ scale: 0.92 }}
               whileHover={{ scale: 1.08 }}
-              className="
-                btn-accent text-sm sm:text-base px-6 py-3 rounded-lg shadow-md
-                shadow-accent/20
-              "
+              className="btn-accent text-sm sm:text-base px-6 py-3 rounded-lg shadow-md shadow-accent/20"
               type="submit"
             >
               Send Message
