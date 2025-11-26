@@ -62,7 +62,7 @@ export default function Footer() {
             © {new Date().getFullYear()}{" "}
             <span className="text-accent font-semibold">Samir Jadhav</span>.
           </p>
-          <p className="text-white/40 text-sm mt-1">
+          <p className="text-white/40 text-sm mt-1 pb-5">
             Designed with ❤️ using React, Tailwind & Framer Motion.
           </p>
         </div>

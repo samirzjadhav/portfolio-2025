@@ -9,13 +9,14 @@ export default function Contact() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7 }}
-      className="mt-20 py-16"
+      className="mt-20 py-16 px-4 sm:px-6"
     >
       {/* TITLE */}
       <div className="relative inline-block">
-        <h3 className="section-title">Contact</h3>
+        <h3 className="section-title text-center sm:text-left">Contact</h3>
       </div>
-      <p className="section-sub mt-2 text-white/70">
+
+      <p className="section-sub mt-2 text-white/70 text-center sm:text-left">
         Interested in working together? Let’s connect.
       </p>
 
@@ -26,22 +27,28 @@ export default function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
           className="
-            glass p-8 rounded-2xl backdrop-blur-2xl
+            glass p-6 sm:p-8 rounded-2xl backdrop-blur-2xl
             border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
+            flex flex-col justify-center
           "
         >
-          <h4 className="text-accent font-bold text-xl">Get in touch</h4>
+          <h4 className="text-accent font-bold text-xl sm:text-2xl">
+            Get in touch
+          </h4>
 
-          <p className="section-sub mt-6 flex items-center gap-3">
-            <i className="bx bx-envelope text-2xl text-accent"></i>
-            samirzjadhav@gmail.com
-          </p>
+          <div className="mt-6 space-y-5">
+            <p className="section-sub flex items-center gap-3 break-all">
+              <i className="bx bx-envelope text-2xl text-accent"></i>
+              samirzjadhav@gmail.com
+            </p>
 
-          <p className="section-sub mt-6 flex items-center gap-3">
-            <i className="bx bx-map text-2xl text-accent"></i>
-            Nagpur, Maharashtra, India
-          </p>
+            <p className="section-sub flex items-center gap-3">
+              <i className="bx bx-map text-2xl text-accent"></i>
+              Nagpur, Maharashtra, India
+            </p>
+          </div>
 
+          {/* SOCIAL LINKS */}
           <div className="mt-8 flex gap-4">
             <a
               href="https://github.com/samirzjadhav"
@@ -77,12 +84,13 @@ export default function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
           className="
-            glass p-8 rounded-2xl space-y-6 backdrop-blur-2xl 
+            glass p-6 sm:p-8 rounded-2xl backdrop-blur-2xl 
             border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
+            space-y-6
           "
         >
           {/* NAME + EMAIL */}
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <input
               name="name"
               placeholder="Your Name"
@@ -90,7 +98,7 @@ export default function Contact() {
               className="
                 p-4 rounded-lg bg-white/5 text-white border border-white/10
                 focus:outline-none focus:border-accent/60 focus:bg-white/10 
-                transition placeholder-white/40
+                transition placeholder-white/40 w-full
               "
             />
 
@@ -102,7 +110,7 @@ export default function Contact() {
               className="
                 p-4 rounded-lg bg-white/5 text-white border border-white/10
                 focus:outline-none focus:border-accent/60 focus:bg-white/10 
-                transition placeholder-white/40
+                transition placeholder-white/40 w-full
               "
             />
           </div>
@@ -126,7 +134,7 @@ export default function Contact() {
               whileTap={{ scale: 0.92 }}
               whileHover={{ scale: 1.08 }}
               className="
-                btn-accent text-sm px-6 py-3 rounded-lg shadow-md
+                btn-accent text-sm sm:text-base px-6 py-3 rounded-lg shadow-md
                 shadow-accent/20
               "
               type="submit"
