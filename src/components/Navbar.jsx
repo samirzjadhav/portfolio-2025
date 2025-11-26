@@ -31,7 +31,7 @@ export default function Navbar({ activeSection }) {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* LOGO */}
-          <a href="/#home" className="text-2xl md:text-4xl font-dancing">
+          <a href="#home" className="text-2xl md:text-4xl font-dancing">
             <span className="text-white">Samir</span>{" "}
             <span className="text-accent">Jadhav</span>
           </a>
@@ -53,7 +53,7 @@ export default function Navbar({ activeSection }) {
             {!hideSections && (
               <>
                 <a
-                  href="/#about"
+                  href="#about"
                   className={
                     activeSection === "about"
                       ? "text-accent font-semibold"
@@ -64,7 +64,7 @@ export default function Navbar({ activeSection }) {
                 </a>
 
                 <a
-                  href="/#skills"
+                  href="#skills"
                   className={
                     activeSection === "skills"
                       ? "text-accent font-semibold"
@@ -75,7 +75,7 @@ export default function Navbar({ activeSection }) {
                 </a>
 
                 <a
-                  href="/#portfolio"
+                  href="#portfolio"
                   className={
                     activeSection === "portfolio"
                       ? "text-accent font-semibold"
@@ -86,7 +86,7 @@ export default function Navbar({ activeSection }) {
                 </a>
 
                 <a
-                  href="/#contact"
+                  href="#contact"
                   className={
                     activeSection === "contact"
                       ? "text-accent font-semibold"

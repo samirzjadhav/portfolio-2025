@@ -18,16 +18,15 @@ export default function App() {
       const sections = ["home", "about", "skills", "portfolio", "contact"];
       let current = "home";
 
-      for (let sec of sections) {
-        const element = document.getElementById(sec);
-        if (!element) continue;
+      sections.forEach((sec) => {
+        const el = document.getElementById(sec);
+        if (!el) return;
 
-        const top = element.getBoundingClientRect().top;
-
-        if (top <= window.innerHeight * 0.3) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= window.innerHeight * 0.3) {
           current = sec;
         }
-      }
+      });
 
       setActiveSection(current);
     }
