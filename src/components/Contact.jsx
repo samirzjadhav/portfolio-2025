@@ -9,58 +9,132 @@ export default function Contact() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7 }}
-      className="mt-12 py-12"
+      className="mt-20 py-16"
     >
-      <h3 className="section-title">Contact</h3>
-      <p className="section-sub mt-2">
-        Interested in working together? Send a message.
+      {/* TITLE */}
+      <div className="relative inline-block">
+        <h3 className="section-title">Contact</h3>
+      </div>
+      <p className="section-sub mt-2 text-white/70">
+        Interested in working together? Let’s connect.
       </p>
 
-      <div className="mt-6 grid md:grid-cols-2 gap-8">
-        <div className="glass p-6">
-          <h4 className="text-accent font-semibold">Get in touch</h4>
-          <p className="section-sub mt-3">samirzjadhav@gmail.com</p>
-          <p className="section-sub mt-4">Nagpur, Maharashtra, India</p>
-        </div>
+      <div className="mt-14 grid md:grid-cols-2 gap-10">
+        {/* LEFT — CONTACT INFO CARD */}
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7 }}
+          className="
+            glass p-8 rounded-2xl backdrop-blur-2xl
+            border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
+          "
+        >
+          <h4 className="text-accent font-bold text-xl">Get in touch</h4>
 
-        <form
+          <p className="section-sub mt-6 flex items-center gap-3">
+            <i className="bx bx-envelope text-2xl text-accent"></i>
+            samirzjadhav@gmail.com
+          </p>
+
+          <p className="section-sub mt-6 flex items-center gap-3">
+            <i className="bx bx-map text-2xl text-accent"></i>
+            Nagpur, Maharashtra, India
+          </p>
+
+          <div className="mt-8 flex gap-4">
+            <a
+              href="https://github.com/samirzjadhav"
+              target="_blank"
+              className="glass p-3 rounded-lg hover:bg-white/10 transition"
+            >
+              <i className="bx bxl-github text-2xl"></i>
+            </a>
+
+            <a
+              href="https://linkedin.com/in/samirjadhav"
+              target="_blank"
+              className="glass p-3 rounded-lg hover:bg-white/10 transition"
+            >
+              <i className="bx bxl-linkedin text-2xl"></i>
+            </a>
+
+            <a
+              href="https://twitter.com/samirzjadhav"
+              target="_blank"
+              className="glass p-3 rounded-lg hover:bg-white/10 transition"
+            >
+              <i className="bx bxl-twitter text-2xl"></i>
+            </a>
+          </div>
+        </motion.div>
+
+        {/* RIGHT — FORM CARD */}
+        <motion.form
           action="https://getform.io/f/bzylzvva"
           method="POST"
-          className="glass p-6 space-y-4"
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7 }}
+          className="
+            glass p-8 rounded-2xl space-y-6 backdrop-blur-2xl 
+            border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
+          "
         >
-          <div className="grid grid-cols-2 gap-3">
+          {/* NAME + EMAIL */}
+          <div className="grid grid-cols-2 gap-5">
             <input
               name="name"
-              placeholder="Name"
+              placeholder="Your Name"
               required
-              className="p-3 rounded-md bg-transparent border border-white/8 text-white"
+              className="
+                p-4 rounded-lg bg-white/5 text-white border border-white/10
+                focus:outline-none focus:border-accent/60 focus:bg-white/10 
+                transition placeholder-white/40
+              "
             />
+
             <input
               name="email"
               type="email"
-              placeholder="Email"
+              placeholder="Email Address"
               required
-              className="p-3 rounded-md bg-transparent border border-white/8 text-white"
+              className="
+                p-4 rounded-lg bg-white/5 text-white border border-white/10
+                focus:outline-none focus:border-accent/60 focus:bg-white/10 
+                transition placeholder-white/40
+              "
             />
           </div>
+
+          {/* MESSAGE BOX */}
           <textarea
             name="message"
             rows="6"
-            placeholder="Message here"
+            placeholder="Your Message..."
             required
-            className="w-full p-3 rounded-md bg-transparent border border-white/8 text-white"
+            className="
+              w-full p-4 rounded-lg bg-white/5 text-white border border-white/10
+              focus:outline-none focus:border-accent/60 focus:bg-white/10
+              transition placeholder-white/40
+            "
           ></textarea>
+
+          {/* SEND BUTTON */}
           <div className="flex justify-end">
             <motion.button
               whileTap={{ scale: 0.92 }}
-              whileHover={{ scale: 1.05 }}
-              className="btn-accent"
+              whileHover={{ scale: 1.08 }}
+              className="
+                btn-accent text-sm px-6 py-3 rounded-lg shadow-md
+                shadow-accent/20
+              "
               type="submit"
             >
               Send Message
             </motion.button>
           </div>
-        </form>
+        </motion.form>
       </div>
     </motion.section>
   );
