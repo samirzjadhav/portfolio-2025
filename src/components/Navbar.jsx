@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../index.css";
 
 export default function Navbar({ activeSection }) {
@@ -10,6 +10,7 @@ export default function Navbar({ activeSection }) {
   const hideSections =
     location.pathname === "/resume" || location.pathname === "/github";
 
+  // Highlight only real routes
   const isRouteActive = (path) =>
     location.pathname === path
       ? "text-accent font-semibold"
@@ -31,25 +32,26 @@ export default function Navbar({ activeSection }) {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* LOGO */}
-          <a href="#home" className="text-2xl md:text-4xl font-dancing">
+          <Link to="/" className="text-2xl md:text-4xl font-dancing">
             <span className="text-white">Samir</span>{" "}
             <span className="text-accent">Jadhav</span>
-          </a>
+          </Link>
 
           {/* DESKTOP NAV */}
           <nav className="hidden md:flex gap-8 items-center">
-            <a href="/#home" className={isRouteActive("/")}>
+            <Link to="/" className={isRouteActive("/")}>
               Home
-            </a>
+            </Link>
 
-            <a href="/github" className={isRouteActive("/github")}>
+            <Link to="/github" className={isRouteActive("/github")}>
               GitHub
-            </a>
+            </Link>
 
-            <a href="/resume" className={isRouteActive("/resume")}>
+            <Link to="/resume" className={isRouteActive("/resume")}>
               Resume
-            </a>
+            </Link>
 
+            {/* Internal sections only visible on Home */}
             {!hideSections && (
               <>
                 <a
@@ -99,7 +101,7 @@ export default function Navbar({ activeSection }) {
             )}
           </nav>
 
-          {/* MOBILE BUTTON */}
+          {/* MOBILE MENU BUTTON */}
           <div className="md:hidden flex items-center gap-3">
             <button onClick={() => setOpen(!open)} className="glass p-2">
               <i className="bx bx-menu text-xl"></i>
@@ -112,22 +114,22 @@ export default function Navbar({ activeSection }) {
       {open && (
         <div className="px-6 pb-4 md:hidden">
           <div className="glass p-4 mt-3 space-y-3">
-            <a href="/#home" className={isRouteActive("/")}>
+            <Link to="/" className={isRouteActive("/")}>
               Home
-            </a>
+            </Link>
 
-            <a href="/github" className={isRouteActive("/github")}>
+            <Link to="/github" className={isRouteActive("/github")}>
               GitHub
-            </a>
+            </Link>
 
-            <a href="/resume" className={isRouteActive("/resume")}>
+            <Link to="/resume" className={isRouteActive("/resume")}>
               Resume
-            </a>
+            </Link>
 
             {!hideSections && (
               <>
                 <a
-                  href="/#about"
+                  href="#about"
                   className={
                     activeSection === "about"
                       ? "text-accent font-semibold"
@@ -136,9 +138,8 @@ export default function Navbar({ activeSection }) {
                 >
                   About
                 </a>
-
                 <a
-                  href="/#skills"
+                  href="#skills"
                   className={
                     activeSection === "skills"
                       ? "text-accent font-semibold"
@@ -147,9 +148,8 @@ export default function Navbar({ activeSection }) {
                 >
                   Skills
                 </a>
-
                 <a
-                  href="/#portfolio"
+                  href="#portfolio"
                   className={
                     activeSection === "portfolio"
                       ? "text-accent font-semibold"
@@ -158,9 +158,8 @@ export default function Navbar({ activeSection }) {
                 >
                   Projects
                 </a>
-
                 <a
-                  href="/#contact"
+                  href="#contact"
                   className={
                     activeSection === "contact"
                       ? "text-accent font-semibold"
