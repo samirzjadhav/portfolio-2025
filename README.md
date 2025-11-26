@@ -1,16 +1,84 @@
-# React + Vite
+<h1 align="center">👋 Hi, I'm <span style="color:#c770c7">Samir Jadhav</span></h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  💻 Frontend Engineer • React Developer • UI/UX Enthusiast  
+</p>
 
-Currently, two official plugins are available:
+<p align="center">
+  I build clean, modern, and user-friendly web experiences using React, Next.js, Tailwind CSS, and Framer Motion.  
+  Passionate about animations, performance, problem-solving, and product-focused development.
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### **Frontend**
 
-## Expanding the ESLint configuration
+<p>
+  <img src="https://skillicons.dev/icons?i=html,css,js,react,nextjs,tailwind,redux,bootstrap" />
+</p>
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### **Tools**
+
+<p>
+  <img src="https://skillicons.dev/icons?i=git,github,vscode,vercel,figma,nodejs" />
+</p>
+
+---
+
+## 📦 Featured Projects
+
+### 🔹 **YouTube Clone (React, Firebase)**
+
+Responsive YouTube UI with search, video playback, trending page, and dark mode.  
+🔗 Demo: https://youtube-clone-flax-iota.vercel.app/  
+📂 Code: https://github.com/samirzjadhav/youtube-clone
+
+---
+
+### 🔹 **Foodies Website (React + API)**
+
+Modern, animated food delivery UI with category filters and dynamic API items.  
+🔗 Demo: https://foodies-website-one.vercel.app/  
+📂 Code: https://github.com/samirzjadhav/foodies-website
+
+---
+
+### 🔹 **TechBomb Business Website**
+
+Clean landing page built with HTML, CSS, and JavaScript.  
+🔗 Demo: https://techbomb-website.vercel.app/  
+📂 Code: https://github.com/samirzjadhav/techbomb-website
+
+---
+
+## 📈 GitHub Stats
+
+<p align="center">
+  <img height="170" src="https://github-readme-stats.vercel.app/api?username=samirzjadhav&show_icons=true&theme=tokyonight" />
+  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=samirzjadhav&layout=compact&theme=tokyonight" />
+</p>
+
+---
+
+## 📊 Contribution Graph
+
+<p align="center">
+  <img src="https://ghchart.rshah.org/6f5cff/samirzjadhav" alt="GitHub Contribution Graph" />
+</p>
+
+---
+
+## 🌐 Connect With Me
+
+<p align="left">
+  <a href="https://samirj.vercel.app"><img src="https://skillicons.dev/icons?i=web" height="40" /></a>
+  <a href="https://linkedin.com/in/samirzjadhav"><img src="https://skillicons.dev/icons?i=linkedin" height="40" /></a>
+  <a href="https://github.com/samirzjadhav"><img src="https://skillicons.dev/icons?i=github" height="40" /></a>
+  <a href="https://twitter.com/samirzjadhav"><img src="https://skillicons.dev/icons?i=twitter" height="40" /></a>
+</p>
+
+---
+
+### ⭐ If you like my work, consider giving a star to my repositories!
