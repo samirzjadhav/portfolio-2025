@@ -172,3 +172,13 @@ body {
     font-weight: 800;
   }
 }
+
+.contribution-graph-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.contribution-graph {
+  min-width: 600px; /* Always readable */
+}

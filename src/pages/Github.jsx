@@ -128,16 +128,18 @@ export default function GitHub() {
         )}
 
         {/* CONTRIBUTIONS */}
-        <div className="mt-14 glass p-6 sm:p-8 rounded-xl border border-white/10 shadow-xl">
+        <div className="mt-16 glass p-6 rounded-xl border border-white/10 shadow-xl">
           <h2 className="text-accent font-semibold text-xl mb-4">
             Contribution Activity
           </h2>
 
-          <img
-            src="https://ghchart.rshah.org/6f5cff/samirzjadhav"
-            alt="GitHub Contributions"
-            className="w-full"
-          />
+          <div className="contribution-graph-wrapper">
+            <img
+              src="https://ghchart.rshah.org/6f5cff/samirzjadhav"
+              alt="GitHub Contributions"
+              className="contribution-graph"
+            />
+          </div>
         </div>
 
         {/* REPOS LIST */}
