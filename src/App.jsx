@@ -9,8 +9,33 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Loader from "./components/Loader";
 import projects from "./data/project";
+import VisitorCounter from "./components/VisitorCounter";
 
 export default function App() {
+  const [activeSection, setActiveSection] = useState("home");
+  useEffect(() => {
+    function handleScroll() {
+      const sections = ["home", "about", "skills", "portfolio", "contact"];
+      let current = "home";
+
+      for (let sec of sections) {
+        const element = document.getElementById(sec);
+        if (!element) continue;
+
+        const top = element.getBoundingClientRect().top;
+
+        if (top <= window.innerHeight * 0.3) {
+          current = sec;
+        }
+      }
+
+      setActiveSection(current);
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const [loading, setLoading] = useState(true);
   const [activeProject, setActiveProject] = useState(projects[0]);
   useEffect(() => {
@@ -22,7 +47,8 @@ export default function App() {
     <Loader />
   ) : (
     <div className="min-h-screen bg-gradient-to-br from-[#07030b] via-[#0f0916] to-[#05020a] text-white">
-      <Navbar />
+      <Navbar activeSection={activeSection} />
+      <VisitorCounter />
       <main className="pt-[70px]">
         <Hero />
         <div className="max-w-6xl mx-auto px-6">

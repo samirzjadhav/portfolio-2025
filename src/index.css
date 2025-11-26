@@ -10,7 +10,7 @@
 
 /* Then your custom CSS */
 :root {
-  --accent: #c770c7;
+  --accent: #c770c7 !important;
   --accent-2: #5361;
 }
 
@@ -96,6 +96,19 @@ body {
 .btn-accent:hover {
   transform: translateY(-4px);
   box-shadow: 0 18px 44px rgba(103, 74, 196, 0.2);
+}
+
+/* resume nav */
+.resume-nav-fix a {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.resume-nav-fix a:hover {
+  color: #c770c7 !important;
+}
+
+.resume-nav-fix .subtle {
+  color: rgba(255, 255, 255, 0.85) !important;
 }
 
 /* Tag / chip */

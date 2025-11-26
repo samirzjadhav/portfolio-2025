@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import GitHub from "./pages/Github.jsx";
+import ResumePage from "./pages/Resume.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 /* Boxicons CDN (used in original) - you can also add this to public/index.html */
@@ -18,6 +19,7 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/github" element={<GitHub />} />
+        <Route path="/resume" element={<ResumePage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
