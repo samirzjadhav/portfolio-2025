@@ -103,7 +103,10 @@ export default function Navbar({ activeSection }) {
 
           {/* MOBILE MENU BUTTON */}
           <div className="md:hidden flex items-center gap-3">
-            <button onClick={() => setOpen(!open)} className="glass p-2">
+            <button
+              onClick={() => setOpen(!open)}
+              className="glass p-2 text-white"
+            >
               <i className="bx bx-menu text-xl"></i>
             </button>
           </div>
@@ -112,66 +115,105 @@ export default function Navbar({ activeSection }) {
 
       {/* MOBILE MENU */}
       {open && (
-        <div className="px-6 pb-4 md:hidden">
-          <div className="glass p-4 mt-3 space-y-3">
-            <Link to="/" className={isRouteActive("/")}>
-              Home
-            </Link>
+        <motion.div
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+          className="px-6 pb-4 md:hidden"
+        >
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0, y: -10 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { staggerChildren: 0.08 },
+              },
+            }}
+            className="glass p-4 mt-3 rounded-xl space-y-3 "
+          >
+            {/* Animation Variant for Each Link */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 8 },
+                visible: { opacity: 1, y: 0 },
+              }}
+            >
+              <Link
+                to="/"
+                onClick={() => setOpen(false)}
+                className={isRouteActive("/")}
+              >
+                Home
+              </Link>
+            </motion.div>
 
-            <Link to="/github" className={isRouteActive("/github")}>
-              GitHub
-            </Link>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 8 },
+                visible: { opacity: 1, y: 0 },
+              }}
+            >
+              <Link
+                to="/github"
+                onClick={() => setOpen(false)}
+                className={isRouteActive("/github")}
+              >
+                GitHub
+              </Link>
+            </motion.div>
 
-            <Link to="/resume" className={isRouteActive("/resume")}>
-              Resume
-            </Link>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 8 },
+                visible: { opacity: 1, y: 0 },
+              }}
+            >
+              <Link
+                to="/resume"
+                onClick={() => setOpen(false)}
+                className={isRouteActive("/resume")}
+              >
+                Resume
+              </Link>
+            </motion.div>
 
+            {/* ONLY SHOW WHEN NOT ON /resume OR /github */}
             {!hideSections && (
               <>
-                <a
-                  href="#about"
-                  className={
-                    activeSection === "about"
-                      ? "text-accent font-semibold"
-                      : "subtle hover:text-accent"
-                  }
-                >
-                  About
-                </a>
-                <a
-                  href="#skills"
-                  className={
-                    activeSection === "skills"
-                      ? "text-accent font-semibold"
-                      : "subtle hover:text-accent"
-                  }
-                >
-                  Skills
-                </a>
-                <a
-                  href="#portfolio"
-                  className={
-                    activeSection === "portfolio"
-                      ? "text-accent font-semibold"
-                      : "subtle hover:text-accent"
-                  }
-                >
-                  Projects
-                </a>
-                <a
-                  href="#contact"
-                  className={
-                    activeSection === "contact"
-                      ? "text-accent font-semibold"
-                      : "subtle hover:text-accent"
-                  }
-                >
-                  Contact
-                </a>
+                {[
+                  { name: "About", id: "#about", key: "about" },
+                  { name: "Skills", id: "#skills", key: "skills" },
+                  { name: "Projects", id: "#portfolio", key: "portfolio" },
+                  { name: "Contact", id: "#contact", key: "contact" },
+                ].map((sec) => (
+                  <motion.div
+                    key={sec.key}
+                    variants={{
+                      hidden: { opacity: 0, y: 8 },
+                      visible: { opacity: 1, y: 0 },
+                    }}
+                  >
+                    <a
+                      href={sec.id}
+                      onClick={() => setOpen(false)}
+                      className={
+                        activeSection === sec.key
+                          ? "text-accent font-semibold"
+                          : "subtle hover:text-accent"
+                      }
+                    >
+                      {sec.name}
+                    </a>
+                  </motion.div>
+                ))}
               </>
             )}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
     </motion.header>
   );

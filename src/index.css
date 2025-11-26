@@ -160,14 +160,14 @@ body {
 /* small responsiveness */
 @media (min-width: 768px) {
   .hero-title {
-    font-size: 6.5rem;
+    font-size: 8rem;
     line-height: 0.82;
     font-weight: 800;
   }
 }
 @media (max-width: 767px) {
   .hero-title {
-    font-size: 3.8rem;
+    font-size: 6rem;
     line-height: 0.9;
     font-weight: 800;
   }
