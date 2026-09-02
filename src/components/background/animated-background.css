@@ -1,0 +1,244 @@
+.animated-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  isolation: isolate;
+}
+
+.ab-layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* Shifting base gradient */
+.ab-gradient {
+  background: linear-gradient(
+    135deg,
+    #07030b 0%,
+    #0f0916 28%,
+    #12061a 52%,
+    #0a0510 78%,
+    #05020a 100%
+  );
+  background-size: 320% 320%;
+  animation: ab-gradient-shift 28s ease-in-out infinite;
+}
+
+.ab-gradient-overlay {
+  background:
+    radial-gradient(ellipse 90% 60% at 20% 10%, rgba(199, 112, 199, 0.09), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 85% 80%, rgba(111, 92, 255, 0.07), transparent 50%);
+  animation: ab-overlay-drift 20s ease-in-out infinite alternate;
+}
+
+/* Grid */
+.ab-grid {
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 85% 75% at 50% 35%, #000 20%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 35%, #000 20%, transparent 72%);
+  animation: ab-grid-fade 14s ease-in-out infinite;
+}
+
+.animated-background[data-intensity="subtle"] .ab-grid {
+  opacity: 0.22;
+}
+
+/* Particles */
+.ab-particles {
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 45%, #000, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 45%, #000, transparent 78%);
+}
+
+.ab-particle {
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(199, 112, 199, 0.55);
+  box-shadow: 0 0 6px rgba(199, 112, 199, 0.35);
+  animation: ab-particle-drift var(--ab-duration, 16s) ease-in-out infinite;
+  animation-delay: var(--ab-delay, 0s);
+  will-change: transform, opacity;
+}
+
+.animated-background[data-intensity="subtle"] .ab-particle {
+  opacity: 0.45;
+}
+
+.ab-particle:nth-child(3n) {
+  background: rgba(111, 92, 255, 0.5);
+  box-shadow: 0 0 6px rgba(111, 92, 255, 0.3);
+}
+
+/* Static glow orbs */
+.ab-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+  opacity: 0.35;
+  animation: ab-orb-float var(--ab-orb-duration, 18s) ease-in-out infinite;
+  animation-delay: var(--ab-orb-delay, 0s);
+}
+
+.ab-orb-a {
+  width: 22rem;
+  height: 22rem;
+  top: 8%;
+  left: 6%;
+  background: radial-gradient(circle, rgba(199, 112, 199, 0.45), transparent 70%);
+}
+
+.ab-orb-b {
+  width: 18rem;
+  height: 18rem;
+  bottom: 12%;
+  right: 8%;
+  background: radial-gradient(circle, rgba(111, 92, 255, 0.38), transparent 70%);
+}
+
+.ab-orb-c {
+  width: 14rem;
+  height: 14rem;
+  top: 42%;
+  right: 22%;
+  background: radial-gradient(circle, rgba(199, 112, 199, 0.28), transparent 70%);
+}
+
+.animated-background[data-intensity="subtle"] .ab-orb {
+  opacity: 0.24;
+}
+
+.ab-mouse-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+
+.animated-background[data-intensity="subtle"] .ab-mouse-glow {
+  opacity: 0.38;
+}
+
+.ab-vignette {
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(5, 2, 10, 0.65) 100%);
+}
+
+@keyframes ab-gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes ab-overlay-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(2%, -1.5%, 0) scale(1.04);
+  }
+}
+
+@keyframes ab-grid-fade {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+  50% {
+    opacity: 0.38;
+  }
+}
+
+.animated-background[data-intensity="subtle"] .ab-grid {
+  animation: ab-grid-fade-subtle 14s ease-in-out infinite;
+}
+
+@keyframes ab-grid-fade-subtle {
+  0%,
+  100% {
+    opacity: 0.14;
+  }
+  50% {
+    opacity: 0.24;
+  }
+}
+
+@keyframes ab-particle-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+    opacity: 0.75;
+  }
+}
+
+@keyframes ab-orb-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -22px, 0);
+  }
+}
+
+@media (max-width: 767px) {
+  .ab-orb {
+    filter: blur(48px);
+    opacity: 0.2;
+  }
+
+  .ab-particle:nth-child(n + 9) {
+    display: none;
+  }
+
+  .ab-grid {
+    background-size: 40px 40px;
+  }
+}
+
+@media (pointer: coarse) {
+  .ab-mouse-glow {
+    display: none;
+  }
+}
+
+.animated-background.ab-paused .ab-gradient,
+.animated-background.ab-paused .ab-gradient-overlay,
+.animated-background.ab-paused .ab-grid,
+.animated-background.ab-paused .ab-particle,
+.animated-background.ab-paused .ab-orb {
+  animation-play-state: paused;
+}
+
+.animated-background[data-reduced="true"] .ab-gradient {
+  animation: none;
+  background-size: 100% 100%;
+  background-position: 0% 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-gradient,
+  .ab-gradient-overlay,
+  .ab-grid,
+  .ab-particle,
+  .ab-orb {
+    animation: none;
+  }
+
+  .ab-gradient {
+    background-size: 100% 100%;
+    background-position: 0% 50%;
+  }
+}
