@@ -1,13 +1,11 @@
-import { StrictMode, lazy, Suspense } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { MotionConfig } from "framer-motion";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
-import App from "./App";
-import Loader from "./components/Loader";
-
-const GitHub = lazy(() => import("./pages/Github"));
-const ResumePage = lazy(() => import("./pages/Resume"));
+import { AnimatedBackground } from "./components/background";
+import CustomCursor from "./components/CustomCursor";
+import { RoutedApp } from "./routes/AnimatedRoutes";
 
 const rootElement = document.getElementById("root");
 
@@ -19,13 +17,11 @@ createRoot(rootElement).render(
   <StrictMode>
     <MotionConfig reducedMotion="user">
       <BrowserRouter>
-        <Suspense fallback={<Loader />}>
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/github" element={<GitHub />} />
-            <Route path="/resume" element={<ResumePage />} />
-          </Routes>
-        </Suspense>
+        <AnimatedBackground intensity="subtle" />
+        <CustomCursor />
+        <div className="relative z-[1]">
+          <RoutedApp />
+        </div>
       </BrowserRouter>
     </MotionConfig>
   </StrictMode>
