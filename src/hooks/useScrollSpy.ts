@@ -5,56 +5,71 @@ const SECTIONS: SectionId[] = [
   "home",
   "about",
   "skills",
+  "building",
+  "experience",
+  "stats",
+  "achievements",
+  "education",
   "portfolio",
   "contact",
 ];
-const ACTIVATION_RATIO = 0.3;
 
-function resolveActiveSection(): SectionId {
-  let current: SectionId = SECTIONS[0];
-  const threshold = window.innerHeight * ACTIVATION_RATIO;
+function pickActiveSection(ratios: Map<SectionId, number>): SectionId {
+  let best: SectionId = SECTIONS[0];
+  let bestRatio = -1;
 
   for (const sectionId of SECTIONS) {
-    const element = document.getElementById(sectionId);
-    if (!element) continue;
-
-    if (element.getBoundingClientRect().top <= threshold) {
-      current = sectionId;
+    const ratio = ratios.get(sectionId) ?? 0;
+    if (ratio > bestRatio) {
+      bestRatio = ratio;
+      best = sectionId;
     }
   }
 
-  return current;
+  return best;
 }
 
 export function useScrollSpy(): SectionId {
   const [activeSection, setActiveSection] = useState<SectionId>(SECTIONS[0]);
   const activeSectionRef = useRef<SectionId>(SECTIONS[0]);
-  const frameRef = useRef<number>(0);
+  const ratiosRef = useRef<Map<SectionId, number>>(new Map());
 
   useEffect(() => {
-    const updateActiveSection = () => {
-      frameRef.current = 0;
+    const elements = SECTIONS.map((sectionId) => ({
+      sectionId,
+      element: document.getElementById(sectionId),
+    })).filter(
+      (entry): entry is { sectionId: SectionId; element: HTMLElement } =>
+        entry.element !== null
+    );
 
-      const nextSection = resolveActiveSection();
-      if (nextSection === activeSectionRef.current) return;
+    if (elements.length === 0) return;
 
-      activeSectionRef.current = nextSection;
-      setActiveSection(nextSection);
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const sectionId = entry.target.id as SectionId;
+          ratiosRef.current.set(sectionId, entry.intersectionRatio);
+        }
 
-    const handleScroll = () => {
-      if (frameRef.current) return;
-      frameRef.current = requestAnimationFrame(updateActiveSection);
-    };
+        const nextSection = pickActiveSection(ratiosRef.current);
+        if (nextSection === activeSectionRef.current) return;
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (frameRef.current) {
-        cancelAnimationFrame(frameRef.current);
+        activeSectionRef.current = nextSection;
+        setActiveSection(nextSection);
+      },
+      {
+        root: null,
+        rootMargin: "-20% 0px -55% 0px",
+        threshold: [0, 0.15, 0.3, 0.45, 0.6],
       }
-    };
+    );
+
+    for (const { element } of elements) {
+      observer.observe(element);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   return activeSection;

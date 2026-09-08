@@ -1,210 +1,389 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import {
+  AnimatePresence,
+  LayoutGroup,
+  motion,
+  useReducedMotion,
+} from "framer-motion";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import { Link, useLocation } from "react-router-dom";
 import { sectionNavLinks } from "../data/navigation";
+import { useNavbarScroll } from "../hooks/useNavbarScroll";
+import { useMotionVariants } from "../motion";
 import type { SectionId } from "../types";
+import { smoothScrollTo } from "../utils/smoothScroll";
 
 interface NavbarProps {
   activeSection?: SectionId;
 }
 
+const ROUTE_LINKS = [
+  { to: "/", label: "Home", match: (path: string) => path === "/" },
+  {
+    to: "/projects",
+    label: "Projects",
+    match: (path: string) => path === "/projects" || path.startsWith("/projects/"),
+  },
+  { to: "/github", label: "GitHub", match: (path: string) => path === "/github" },
+  { to: "/resume", label: "Resume", match: (path: string) => path === "/resume" },
+] as const;
+
+const INDICATOR_TRANSITION = {
+  type: "spring" as const,
+  stiffness: 420,
+  damping: 34,
+  mass: 0.55,
+};
+
+interface NavIndicatorProps {
+  layoutId: string;
+  reduceMotion: boolean;
+}
+
+function NavIndicator({ layoutId, reduceMotion }: NavIndicatorProps) {
+  return (
+    <motion.span
+      layoutId={layoutId}
+      className="navbar-indicator"
+      aria-hidden="true"
+      transition={reduceMotion ? { duration: 0 } : INDICATOR_TRANSITION}
+    />
+  );
+}
+
+interface NavbarLinkProps {
+  active: boolean;
+  children: ReactNode;
+  className?: string;
+  layoutGroupId: string;
+  reduceMotion: boolean;
+  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
+  href?: string;
+  to?: string;
+}
+
+function NavbarLink({
+  active,
+  children,
+  className = "",
+  layoutGroupId,
+  reduceMotion,
+  onClick,
+  href,
+  to,
+}: NavbarLinkProps) {
+  const classes = `navbar-link ${active ? "is-active" : ""} ${className}`.trim();
+  const content = (
+    <>
+      {active ? (
+        <NavIndicator layoutId={layoutGroupId} reduceMotion={reduceMotion} />
+      ) : null}
+      <span className="navbar-link-label">{children}</span>
+    </>
+  );
+
+  const hoverProps = reduceMotion
+    ? undefined
+    : { y: -1, transition: { duration: 0.18 } };
+
+  if (to) {
+    return (
+      <motion.div whileHover={hoverProps} whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
+        <Link to={to} className={classes} onClick={onClick}>
+          {content}
+        </Link>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div whileHover={hoverProps} whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
+      <a href={href} className={classes} onClick={onClick}>
+        {content}
+      </a>
+    </motion.div>
+  );
+}
+
 export default function Navbar({ activeSection }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const scrolled = useNavbarScroll();
+  const reduceMotion = useReducedMotion();
+  const { navReveal } = useMotionVariants();
+  const [navSlideReveal, setNavSlideReveal] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const update = () => setNavSlideReveal(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   const hideSections =
-    location.pathname === "/resume" || location.pathname === "/github";
+    location.pathname === "/projects" ||
+    location.pathname.startsWith("/projects/") ||
+    location.pathname === "/resume" ||
+    location.pathname === "/github";
+
+  const isHome = location.pathname === "/";
+  const layoutGroupId = "navbar-active-indicator";
+
+  const isRouteLinkActive = useCallback(
+    (to: string, match: (path: string) => boolean) => {
+      if (to === "/") {
+        return (
+          location.pathname === "/" &&
+          (hideSections || activeSection === "home")
+        );
+      }
+      return match(location.pathname);
+    },
+    [activeSection, hideSections, location.pathname]
+  );
+
+  const closeMenu = useCallback(() => setOpen(false), []);
+  const toggleMenu = useCallback(() => setOpen((prev) => !prev), []);
 
   useEffect(() => {
     if (!open) return;
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") closeMenu();
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
+  }, [closeMenu, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
-  const isRouteActive = (path: string): string =>
-    location.pathname === path
-      ? "text-accent font-semibold"
-      : "subtle hover:text-accent";
+  const handleSectionClick = useCallback(
+    (section: SectionId) => (event: MouseEvent<HTMLAnchorElement>) => {
+      if (!isHome) return;
+      event.preventDefault();
+      smoothScrollTo(section);
+      closeMenu();
+    },
+    [closeMenu, isHome]
+  );
 
-  const sectionLinkClass = (section: SectionId): string =>
-    activeSection === section
-      ? "text-accent font-semibold"
-      : "subtle hover:text-accent";
+  const mobileLinks = useMemo(() => {
+    const items: Array<{
+      key: string;
+      label: string;
+      active: boolean;
+      to?: string;
+      href?: string;
+      section?: SectionId;
+      onClick?: () => void;
+    }> = ROUTE_LINKS.map((link) => ({
+      key: link.to,
+      label: link.label,
+      active: isRouteLinkActive(link.to, link.match),
+      to: link.to,
+      onClick: closeMenu,
+    }));
+
+    if (!hideSections) {
+      for (const link of sectionNavLinks) {
+        items.push({
+          key: link.section,
+          label: link.name,
+          active: isHome && activeSection === link.section,
+          href: link.href,
+          onClick: closeMenu,
+          section: link.section,
+        });
+      }
+    }
+
+    return items;
+  }, [activeSection, closeMenu, hideSections, isHome, isRouteLinkActive]);
 
   return (
     <motion.header
-      initial={{ y: -60, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      className="
-        fixed top-0 left-0 w-full z-50
-        bg-[rgba(20,15,35,0.85)]
-        backdrop-blur-xl
-        shadow-[0_10px_25px_rgba(0,0,0,0.45)]
-        border-b border-white/10
-      "
+      initial="hidden"
+      animate="visible"
+      variants={navReveal({ slide: navSlideReveal })}
+      className={`navbar ${scrolled ? "navbar--scrolled" : ""} ${
+        open ? "navbar--menu-open" : ""
+      }`.trim()}
     >
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          <Link
-            to="/"
-            aria-label="Samir Jadhav — Home"
-            className="text-2xl md:text-4xl font-dancing"
+      <div className="navbar-inner max-w-6xl mx-auto px-6">
+        <div className="navbar-row">
+          <motion.div
+            whileHover={reduceMotion ? undefined : { scale: 1.02 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.98 }}
           >
-            <span className="text-white">Samir</span>{" "}
-            <span className="text-accent">Jadhav</span>
-          </Link>
-
-          <nav
-            className="hidden md:flex gap-8 items-center"
-            aria-label="Primary navigation"
-          >
-            <Link to="/" className={isRouteActive("/")}>
-              Home
-            </Link>
-
-            <Link to="/github" className={isRouteActive("/github")}>
-              GitHub
-            </Link>
-
-            <Link to="/resume" className={isRouteActive("/resume")}>
-              Resume
-            </Link>
-
-            {!hideSections && (
-              <>
-                <a href="#about" className={sectionLinkClass("about")}>
-                  About
-                </a>
-
-                <a href="#skills" className={sectionLinkClass("skills")}>
-                  Skills
-                </a>
-
-                <a href="#portfolio" className={sectionLinkClass("portfolio")}>
-                  Projects
-                </a>
-
-                <a href="#contact" className={sectionLinkClass("contact")}>
-                  Contact
-                </a>
-              </>
-            )}
-          </nav>
-
-          <div className="md:hidden flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setOpen(!open)}
-              className="glass p-2 text-white"
-              aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-              aria-expanded={open}
-              aria-controls="mobile-navigation"
+            <Link
+              to="/"
+              aria-label="Samir Jadhav — Home"
+              className="text-2xl md:text-4xl font-dancing leading-none"
             >
-              <i className="bx bx-menu text-xl" aria-hidden="true"></i>
-            </button>
-          </div>
+              <span className="text-white">Samir</span>{" "}
+              <span className="text-accent">Jadhav</span>
+            </Link>
+          </motion.div>
+
+          <LayoutGroup id={layoutGroupId}>
+            <nav className="navbar-desktop" aria-label="Primary navigation">
+              {ROUTE_LINKS.map((link) => (
+                <NavbarLink
+                  key={link.to}
+                  to={link.to}
+                  active={isRouteLinkActive(link.to, link.match)}
+                  layoutGroupId={layoutGroupId}
+                  reduceMotion={reduceMotion ?? false}
+                >
+                  {link.label}
+                </NavbarLink>
+              ))}
+
+              {!hideSections &&
+                sectionNavLinks.map((link) => (
+                  <NavbarLink
+                    key={link.section}
+                    href={link.href}
+                    active={isHome && activeSection === link.section}
+                    layoutGroupId={layoutGroupId}
+                    reduceMotion={reduceMotion ?? false}
+                    onClick={handleSectionClick(link.section)}
+                  >
+                    {link.name}
+                  </NavbarLink>
+                ))}
+            </nav>
+          </LayoutGroup>
+
+          <motion.button
+            type="button"
+            className="navbar-toggle md:hidden"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="navbar-mobile-menu"
+            onClick={toggleMenu}
+            whileTap={reduceMotion ? undefined : { scale: 0.94 }}
+          >
+            <span className="navbar-toggle-icon" aria-hidden="true">
+              <motion.span
+                animate={
+                  open
+                    ? { rotate: 45, y: 7 }
+                    : { rotate: 0, y: 0 }
+                }
+                transition={{ duration: reduceMotion ? 0 : 0.22 }}
+                className="navbar-toggle-bar"
+              />
+              <motion.span
+                animate={open ? { opacity: 0, x: -6 } : { opacity: 1, x: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.18 }}
+                className="navbar-toggle-bar"
+              />
+              <motion.span
+                animate={
+                  open
+                    ? { rotate: -45, y: -7 }
+                    : { rotate: 0, y: 0 }
+                }
+                transition={{ duration: reduceMotion ? 0 : 0.22 }}
+                className="navbar-toggle-bar"
+              />
+            </span>
+          </motion.button>
         </div>
       </div>
 
-      {open && (
-        <motion.div
-          id="mobile-navigation"
-          role="navigation"
-          aria-label="Mobile navigation"
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="px-6 pb-4 md:hidden"
-        >
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0, y: -10 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { staggerChildren: 0.08 },
-              },
-            }}
-            className="glass p-4 mt-3 rounded-xl space-y-3 "
-          >
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 8 },
-                visible: { opacity: 1, y: 0 },
+      <AnimatePresence>
+        {open ? (
+          <>
+            <motion.button
+              type="button"
+              className="navbar-mobile-backdrop md:hidden"
+              aria-label="Close menu"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.2 }}
+              onClick={closeMenu}
+            />
+            <motion.nav
+              id="navbar-mobile-menu"
+              className="navbar-mobile md:hidden"
+              aria-label="Mobile navigation"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.28,
+                ease: [0.22, 1, 0.36, 1],
               }}
             >
-              <Link
-                to="/"
-                onClick={() => setOpen(false)}
-                className={isRouteActive("/")}
-              >
-                Home
-              </Link>
-            </motion.div>
-
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 8 },
-                visible: { opacity: 1, y: 0 },
-              }}
-            >
-              <Link
-                to="/github"
-                onClick={() => setOpen(false)}
-                className={isRouteActive("/github")}
-              >
-                GitHub
-              </Link>
-            </motion.div>
-
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 8 },
-                visible: { opacity: 1, y: 0 },
-              }}
-            >
-              <Link
-                to="/resume"
-                onClick={() => setOpen(false)}
-                className={isRouteActive("/resume")}
-              >
-                Resume
-              </Link>
-            </motion.div>
-
-            {!hideSections && (
-              <>
-                {sectionNavLinks.map((sec) => (
-                  <motion.div
-                    key={sec.section}
-                    variants={{
-                      hidden: { opacity: 0, y: 8 },
-                      visible: { opacity: 1, y: 0 },
+              <ul className="navbar-mobile-list">
+                {mobileLinks.map((link, index) => (
+                  <motion.li
+                    key={link.key}
+                    initial={reduceMotion ? false : { opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={reduceMotion ? undefined : { opacity: 0, x: -8 }}
+                    transition={{
+                      duration: reduceMotion ? 0 : 0.24,
+                      delay: reduceMotion ? 0 : index * 0.04,
                     }}
                   >
-                    <a
-                      href={sec.href}
-                      onClick={() => setOpen(false)}
-                      className={sectionLinkClass(sec.section)}
-                    >
-                      {sec.name}
-                    </a>
-                  </motion.div>
+                    {link.to ? (
+                      <Link
+                        to={link.to}
+                        className={`navbar-mobile-link ${
+                          link.active ? "is-active" : ""
+                        }`.trim()}
+                        onClick={link.onClick}
+                      >
+                        {link.label}
+                        {link.active ? (
+                          <span className="navbar-mobile-active-dot" aria-hidden="true" />
+                        ) : null}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className={`navbar-mobile-link ${
+                          link.active ? "is-active" : ""
+                        }`.trim()}
+                        onClick={(event) => {
+                          if (isHome && link.section) {
+                            event.preventDefault();
+                            smoothScrollTo(link.section);
+                          }
+                          link.onClick?.();
+                        }}
+                      >
+                        {link.label}
+                        {link.active ? (
+                          <span className="navbar-mobile-active-dot" aria-hidden="true" />
+                        ) : null}
+                      </a>
+                    )}
+                  </motion.li>
                 ))}
-              </>
-            )}
-          </motion.div>
-        </motion.div>
-      )}
+              </ul>
+            </motion.nav>
+          </>
+        ) : null}
+      </AnimatePresence>
     </motion.header>
   );
 }
