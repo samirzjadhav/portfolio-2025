@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useMotionVariants } from "../motion";
 
 type AriaLiveValue = "polite" | "assertive" | "off";
 
@@ -19,15 +20,14 @@ export default function GitHubStateCard({
   role = "status",
   ariaLive = "polite",
 }: GitHubStateCardProps) {
+  const { fadeUp } = useMotionVariants();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="
-        glass p-8 sm:p-10 rounded-2xl border border-white/10
-        shadow-[0_12px_40px_rgba(0,0,0,0.45)] text-center
-      "
+      initial="hidden"
+      animate="visible"
+      variants={fadeUp(20)}
+      className="glass surface-card p-8 sm:p-10 text-center"
       role={role}
       aria-live={ariaLive}
     >

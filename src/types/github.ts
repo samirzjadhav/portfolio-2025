@@ -27,6 +27,31 @@ export interface GitHubDashboard {
   repos: GitHubRepo[];
 }
 
+export type GitHubContributionLevel =
+  | "NONE"
+  | "FIRST_QUARTILE"
+  | "SECOND_QUARTILE"
+  | "THIRD_QUARTILE"
+  | "FOURTH_QUARTILE";
+
+export interface GitHubContributionDay {
+  date: string;
+  contributionCount: number;
+  contributionLevel: GitHubContributionLevel;
+}
+
+export interface GitHubContributionWeek {
+  contributionDays: GitHubContributionDay[];
+}
+
+export interface GitHubContributionCalendar {
+  username: string;
+  totalContributions: number;
+  weeks: GitHubContributionWeek[];
+}
+
+export type GitHubContributionsStatus = "loading" | "success" | "error";
+
 export type GitHubDataStatus = "loading" | "success" | "error";
 
 export interface GitHubDataState {
@@ -39,8 +64,11 @@ export interface GitHubDataState {
 export interface UseGitHubDataResult {
   profile: GitHubProfile | null;
   repos: GitHubRepo[];
+  contributions: GitHubContributionCalendar | null;
+  contributionsError: string | null;
   error: string | null;
   isLoading: boolean;
+  isContributionsLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
   isEmpty: boolean;

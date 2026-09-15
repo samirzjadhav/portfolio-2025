@@ -1,164 +1,82 @@
-import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { useMotionVariants } from "../motion";
+import GitHubAnimatedSection from "../components/GitHubAnimatedSection";
+import GitHubStaggerGrid from "../components/GitHubStaggerGrid";
+import GitHubContributionHeatmap, {
+  GitHubContributionHeatmapSkeleton,
+} from "../components/GitHubContributionHeatmap";
+import GitHubDashboardSkeleton from "../components/GitHubDashboardSkeleton";
+import GitHubHero from "../components/GitHubHero";
+import GitHubInlineState from "../components/GitHubInlineState";
+import GitHubLanguagesPanel from "../components/GitHubLanguagesPanel";
+import GitHubRepoCard from "../components/GitHubRepoCard";
+import GitHubRepoToolbar from "../components/GitHubRepoToolbar";
+import GitHubSectionHeading from "../components/GitHubSectionHeading";
+import GitHubStatCard from "../components/GitHubStatCard";
+import GitHubStateCard from "../components/GitHubStateCard";
+import GitHubStatsPanel from "../components/GitHubStatsPanel";
 import Navbar from "../components/Navbar";
 import SkipToContent from "../components/SkipToContent";
 import VisitorCounter from "../components/VisitorCounter";
-import GitHubStateCard from "../components/GitHubStateCard";
-import { GITHUB_USERNAME, getContributionChartUrl } from "../services";
+import { GITHUB_USERNAME } from "../services";
 import { PAGE_META } from "../config/site";
-import { contactInfo, socialLinks } from "../data/contact";
 import { useGitHubData } from "../hooks/useGitHubData";
 import { usePageMeta } from "../hooks/usePageMeta";
-import type { GitHubProfile, GitHubRepo } from "../types";
+import {
+  filterRepos,
+  getDashboardStats,
+  getLanguageStats,
+  getRepoLanguages,
+  getTopRepos,
+} from "../utils/githubDashboard";
 
-interface GitHubProfileCardProps {
-  profile: GitHubProfile;
-}
-
-function GitHubProfileCard({ profile }: GitHubProfileCardProps) {
+function SectionDivider() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="
-        mt-10 p-6 sm:p-8 rounded-2xl glass backdrop-blur-2xl
-        border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
-        flex flex-col md:flex-row items-center gap-6 sm:gap-8
-      "
-    >
-      <img
-        src={profile.avatar_url}
-        alt={`${profile.name || profile.login} GitHub avatar`}
-        loading="lazy"
-        decoding="async"
-        className="w-32 h-32 sm:w-48 sm:h-48 md:w-56 md:h-56 
-                   rounded-full border-4 border-accent shadow-xl"
-      />
-
-      <div className="flex-1 text-center md:text-left">
-        <h2 className="text-2xl sm:text-3xl font-bold">
-          {profile.name || profile.login}
-        </h2>
-        <p className="text-white/60">@{profile.login}</p>
-
-        <p className="mt-3 sm:mt-4 section-sub leading-relaxed">
-          {profile.bio ||
-            "Frontend Developer passionate about building clean & modern UIs."}
-        </p>
-
-        <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-4 text-white/70">
-          <div>📁 {profile.public_repos} Repositories</div>
-          <div>👥 {profile.followers} Followers</div>
-          <div>➡️ {profile.following} Following</div>
-          {profile.location && <div>📍 {profile.location}</div>}
-        </div>
-
-        <div className="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
-          <a
-            href={profile.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="glass px-4 py-2 rounded-lg"
-          >
-            GitHub Profile
-          </a>
-
-          <a
-            href={contactInfo.portfolioUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="glass px-4 py-2 rounded-lg"
-          >
-            Portfolio
-          </a>
-
-          {socialLinks
-            .filter((link) => link.platform !== "github")
-            .map((link) => (
-              <a
-                key={link.platform}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass px-4 py-2 rounded-lg"
-              >
-                {link.platform === "twitter" ? "Twitter" : "LinkedIn"}
-              </a>
-            ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-interface GitHubRepoCardProps {
-  repo: GitHubRepo;
-}
-
-function GitHubRepoCard({ repo }: GitHubRepoCardProps) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.03 }}
-      transition={{ duration: 0.4 }}
-      className="
-        glass p-6 sm:p-7 rounded-2xl border border-white/10 
-        shadow-[0_8px_30px_rgba(0,0,0,0.35)]
-      "
-    >
-      <h3 className="text-lg sm:text-xl font-bold">{repo.name}</h3>
-
-      <p className="text-white/60 text-sm mt-2 leading-relaxed">
-        {repo.description || "A modern open-source project by Samir."}
-      </p>
-
-      <div className="mt-4 flex flex-wrap gap-4 text-white/60 text-sm">
-        <span>⭐ {repo.stargazers_count}</span>
-        <span>🍴 {repo.forks_count}</span>
-        <span>🟦 {repo.language || "N/A"}</span>
-        <span>⏱ {new Date(repo.updated_at).toLocaleDateString()}</span>
-      </div>
-
-      <div className="mt-6 flex flex-col sm:flex-row gap-4">
-        <motion.a
-          href={repo.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          whileHover={{ scale: 1.06 }}
-          className="btn-accent text-sm py-2 rounded-lg text-center flex-1"
-        >
-          View Repo
-        </motion.a>
-
-        {repo.homepage && (
-          <motion.a
-            href={repo.homepage}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.06 }}
-            className="glass py-2 rounded-lg text-sm text-center flex-1"
-          >
-            Live Demo
-          </motion.a>
-        )}
-      </div>
-    </motion.div>
+    <div
+      className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"
+      aria-hidden="true"
+    />
   );
 }
 
 export default function GitHub() {
   usePageMeta(PAGE_META.github);
+  const motionVariants = useMotionVariants();
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
   const {
     profile,
     repos,
+    contributions,
+    contributionsError,
     error,
     isLoading,
+    isContributionsLoading,
     isError,
     isEmpty,
     retry,
   } = useGitHubData();
+
+  const stats = useMemo(
+    () => (profile ? getDashboardStats(profile, repos) : null),
+    [profile, repos]
+  );
+  const languages = useMemo(() => getLanguageStats(repos), [repos]);
+  const topRepos = useMemo(() => getTopRepos(repos), [repos]);
+  const repoLanguages = useMemo(() => getRepoLanguages(repos), [repos]);
+  const filteredRepos = useMemo(
+    () => filterRepos(repos, searchQuery, selectedLanguage),
+    [repos, searchQuery, selectedLanguage]
+  );
+
+  const cardVariants = motionVariants.fadeUp(14);
+  const panelVariants = motionVariants.fadeUp(16);
+  const statVariants = motionVariants.fadeUp(12);
+
+  const hasActiveFilters =
+    searchQuery.trim().length > 0 || selectedLanguage !== null;
 
   return (
     <>
@@ -172,82 +90,205 @@ export default function GitHub() {
       <main
         id="main-content"
         tabIndex={-1}
-        className="min-h-screen bg-gradient-to-br from-[#07030b] via-[#0f0916] to-[#05020a] 
-                      text-white px-4 sm:px-6 py-20 pt-[90px]"
+        className="min-h-screen text-white px-4 sm:px-6 py-16 sm:py-20 pt-[84px] sm:pt-[90px]"
       >
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl sm:text-4xl font-bold section-title mb-4 text-center"
-        >
-          GitHub Dashboard
-        </motion.h1>
+        <div className="max-w-6xl mx-auto w-full">
+          {isLoading && <GitHubDashboardSkeleton />}
 
-        <p className="section-sub text-center text-white/70 mb-6 sm:mb-10">
-          My open-source activity, repositories, and contribution stats.
-        </p>
+          {isError && (
+            <GitHubAnimatedSection>
+              <GitHubStateCard
+                title="Unable to load GitHub data"
+                message={error ?? "Unable to load GitHub dashboard data."}
+                actionLabel="Try again"
+                onAction={retry}
+                role="alert"
+                ariaLive="assertive"
+              />
+            </GitHubAnimatedSection>
+          )}
 
-        {isLoading && (
-          <GitHubStateCard
-            title="Loading GitHub data"
-            message="Fetching profile details and the latest public repositories..."
-          />
-        )}
+          {!isLoading && !isError && profile && stats && (
+            <div className="flex flex-col gap-8 md:gap-10 lg:gap-12 w-full">
+              <GitHubAnimatedSection ariaLabel="Profile overview">
+                <GitHubHero profile={profile} />
+              </GitHubAnimatedSection>
 
-        {isError && (
-          <GitHubStateCard
-            title="Unable to load GitHub data"
-            message={error ?? "Unable to load GitHub dashboard data."}
-            actionLabel="Try again"
-            onAction={retry}
-            role="alert"
-            ariaLive="assertive"
-          />
-        )}
+              <SectionDivider />
 
-        {!isLoading && !isError && profile && (
-          <GitHubProfileCard profile={profile} />
-        )}
+              <GitHubAnimatedSection ariaLabel="Repository metrics">
+                <GitHubStaggerGrid className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
+                  <GitHubStatCard
+                    label="Total stars"
+                    value={stats.totalStars}
+                    icon="bx-star"
+                    variants={statVariants}
+                  />
+                  <GitHubStatCard
+                    label="Total forks"
+                    value={stats.totalForks}
+                    icon="bx-git-branch"
+                    variants={statVariants}
+                  />
+                  <GitHubStatCard
+                    label="Languages"
+                    value={stats.languageCount}
+                    icon="bx-code-alt"
+                    variants={statVariants}
+                  />
+                  <GitHubStatCard
+                    label="Top language"
+                    value={stats.topLanguage ?? "—"}
+                    icon="bx-layer"
+                    variants={statVariants}
+                  />
+                </GitHubStaggerGrid>
+              </GitHubAnimatedSection>
 
-        <div className="mt-16 glass p-6 rounded-xl border border-white/10 shadow-xl">
-          <h2 className="text-accent font-semibold text-xl mb-4">
-            Contribution Activity
-          </h2>
+              <SectionDivider />
 
-          <div className="contribution-graph-wrapper">
-            <img
-              src={getContributionChartUrl()}
-              alt={`GitHub contribution activity chart for ${GITHUB_USERNAME}`}
-              loading="lazy"
-              decoding="async"
-              className="contribution-graph"
-            />
-          </div>
+              <GitHubAnimatedSection ariaLabel="Contribution activity">
+                <GitHubSectionHeading
+                  icon="bx-calendar-check"
+                  title="Contribution Activity"
+                  subtitle="Public GitHub activity over the past year"
+                />
+                <div className="glass surface-card p-4 sm:p-5 md:p-6 w-full overflow-hidden">
+                  <div className="contribution-graph-wrapper contribution-panel rounded-xl p-4 sm:p-5 md:p-6">
+                    {isContributionsLoading && (
+                      <GitHubContributionHeatmapSkeleton />
+                    )}
+
+                    {!isContributionsLoading && contributions && (
+                      <GitHubContributionHeatmap calendar={contributions} />
+                    )}
+
+                    {!isContributionsLoading && !contributions && (
+                      <GitHubInlineState
+                        variant="error"
+                        title="Contribution activity unavailable"
+                        message={
+                          contributionsError ??
+                          `Unable to load contribution data for @${GITHUB_USERNAME}.`
+                        }
+                        actionLabel="Try again"
+                        onAction={retry}
+                        role="alert"
+                      />
+                    )}
+                  </div>
+                </div>
+              </GitHubAnimatedSection>
+
+              <SectionDivider />
+
+              <GitHubAnimatedSection ariaLabel="Language and stats overview">
+                <GitHubStaggerGrid
+                  className="grid md:grid-cols-2 gap-4 sm:gap-6 w-full"
+                  staggerAmount={0.08}
+                >
+                  <GitHubLanguagesPanel
+                    languages={languages}
+                    variants={panelVariants}
+                  />
+                  <GitHubStatsPanel stats={stats} variants={panelVariants} />
+                </GitHubStaggerGrid>
+              </GitHubAnimatedSection>
+
+              {topRepos.length > 0 && (
+                <>
+                  <SectionDivider />
+
+                  <GitHubAnimatedSection ariaLabel="Top repositories">
+                    <GitHubSectionHeading
+                      icon="bx-medal"
+                      title="Top Repositories"
+                      subtitle="Ranked by stars"
+                    />
+                    <GitHubStaggerGrid className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                      {topRepos.map((repo, index) => (
+                        <GitHubRepoCard
+                          key={repo.id}
+                          repo={repo}
+                          rank={index + 1}
+                          variants={cardVariants}
+                        />
+                      ))}
+                    </GitHubStaggerGrid>
+                  </GitHubAnimatedSection>
+                </>
+              )}
+
+              <SectionDivider />
+
+              <GitHubAnimatedSection ariaLabel="Public repositories">
+                <GitHubSectionHeading
+                  icon="bx-book-bookmark"
+                  title="Public Repositories"
+                  subtitle="Latest updated repositories"
+                />
+
+                {isEmpty && (
+                  <GitHubInlineState
+                    variant="empty"
+                    title="No public repositories found"
+                    message={`@${GITHUB_USERNAME} does not currently have public repositories to display.`}
+                    actionLabel="Refresh"
+                    onAction={retry}
+                  />
+                )}
+
+                {!isEmpty && repos.length > 0 && (
+                  <>
+                    <GitHubRepoToolbar
+                      searchQuery={searchQuery}
+                      onSearchChange={setSearchQuery}
+                      languages={repoLanguages}
+                      selectedLanguage={selectedLanguage}
+                      onLanguageChange={setSelectedLanguage}
+                      totalCount={repos.length}
+                      filteredCount={filteredRepos.length}
+                    />
+
+                    {filteredRepos.length === 0 ? (
+                      <GitHubInlineState
+                        variant="empty"
+                        icon="bx-search-alt text-white/45"
+                        title="No matching repositories"
+                        message={
+                          hasActiveFilters
+                            ? "Try a different search term or clear the language filter."
+                            : "No repositories match the current filters."
+                        }
+                        actionLabel={
+                          hasActiveFilters ? "Clear filters" : undefined
+                        }
+                        onAction={
+                          hasActiveFilters
+                            ? () => {
+                                setSearchQuery("");
+                                setSelectedLanguage(null);
+                              }
+                            : undefined
+                        }
+                      />
+                    ) : (
+                      <GitHubStaggerGrid className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 w-full">
+                        {filteredRepos.map((repo) => (
+                          <GitHubRepoCard
+                            key={repo.id}
+                            repo={repo}
+                            variants={cardVariants}
+                          />
+                        ))}
+                      </GitHubStaggerGrid>
+                    )}
+                  </>
+                )}
+              </GitHubAnimatedSection>
+            </div>
+          )}
         </div>
-
-        {!isLoading && !isError && (
-          <h2 className="text-accent font-semibold text-2xl mt-14 mb-4">
-            Latest 10 Repositories
-          </h2>
-        )}
-
-        {!isLoading && !isError && isEmpty && (
-          <GitHubStateCard
-            title="No public repositories found"
-            message={`@${GITHUB_USERNAME} does not currently have public repositories to display.`}
-            actionLabel="Refresh"
-            onAction={retry}
-          />
-        )}
-
-        {!isLoading && !isError && repos.length > 0 && (
-          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 mt-6">
-            {repos.map((repo) => (
-              <GitHubRepoCard key={repo.id} repo={repo} />
-            ))}
-          </div>
-        )}
       </main>
     </>
   );
