@@ -1,29 +1,12 @@
-// IMPORT ALL IMAGES FIRST
 import p1Img from "../assets/Projects/work-4.jpg";
 import p2Img from "../assets/Projects/work-1.jpg";
 import p3Img from "../assets/Projects/work-3.jpg";
 import p4Img from "../assets/Projects/work-5.jpg";
 import p5Img from "../assets/Projects/work-2.jpg";
 import p6Img from "../assets/Projects/work-6.jpg";
+import type { Project } from "../types";
 
-/**
- * @typedef {Object} Project
- * @property {string} id
- * @property {string} title
- * @property {string} img
- * @property {string} demo
- * @property {string} code
- * @property {string[]} tags
- * @property {string} description - One-line summary for the featured card overlay
- * @property {string} shortDesc - Brief tagline for the project grid
- * @property {string} overview - Longer case-study style summary
- * @property {string[]} features - Key capabilities built in the project
- * @property {string[]} challenges - Problems solved or technical hurdles
- * @property {string} outcome - Result or impact of the project
- */
-
-/** @type {Project[]} */
-const projects = [
+const projects: Project[] = [
   {
     id: "p1",
     title: "YouTube Clone",
