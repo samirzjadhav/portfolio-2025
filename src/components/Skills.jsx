@@ -1,25 +1,85 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const skills = [
-  { name: "HTML", pct: 95 },
-  { name: "CSS", pct: 90 },
-  { name: "JavaScript", pct: 85 },
-  { name: "React", pct: 90 },
-  { name: "Next.js", pct: 60 },
-  { name: "Tailwind", pct: 90 },
+const skillCategories = [
+  {
+    title: "Frontend",
+    items: [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Tailwind CSS",
+      "Framer Motion",
+    ],
+  },
+  {
+    title: "Backend",
+    items: ["Node.js", "Express.js", "REST APIs"],
+  },
+  {
+    title: "Database",
+    items: ["MongoDB", "Firebase"],
+  },
+  {
+    title: "Testing",
+    items: ["Jest", "Vitest", "React Testing Library"],
+  },
+  {
+    title: "Tools",
+    items: [
+      "VS Code",
+      "Git",
+      "GitHub",
+      "Vercel",
+      "NPM",
+      "Figma",
+      "Linux",
+    ],
+  },
 ];
 
-const tools = [
-  "VS Code",
-  "Git",
-  "GitHub",
-  "Vercel",
-  "NPM",
-  "Node.js",
-  "Figma",
-  "Linux",
-];
+const stackCategories = skillCategories.filter(({ title }) =>
+  ["Frontend", "Backend", "Database"].includes(title)
+);
+
+const workflowCategories = skillCategories.filter(({ title }) =>
+  ["Testing", "Tools"].includes(title)
+);
+
+function SkillChip({ label }) {
+  return (
+    <motion.span
+      whileHover={{ scale: 1.08 }}
+      className="
+        px-4 py-2 rounded-full text-sm
+        bg-white/5 border border-white/10 backdrop-blur-md
+        text-white/80 shadow-[0_4px_10px_rgba(0,0,0,0.2)]
+      "
+    >
+      {label}
+    </motion.span>
+  );
+}
+
+function SkillCategoryGroup({ categories }) {
+  return (
+    <div className="space-y-8">
+      {categories.map(({ title, items }) => (
+        <div key={title}>
+          <h5 className="text-accent font-bold text-lg">{title}</h5>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {items.map((item) => (
+              <SkillChip key={item} label={item} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Skills() {
   return (
@@ -40,7 +100,7 @@ export default function Skills() {
       </p>
 
       <div className="mt-12 grid md:grid-cols-2 gap-10">
-        {/* LEFT — SKILLS CARD */}
+        {/* LEFT — STACK */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -50,35 +110,11 @@ export default function Skills() {
             border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
           "
         >
-          <h4 className="text-accent font-bold text-xl">Core Skills</h4>
-
-          <div className="mt-6 space-y-6">
-            {skills.map((s) => (
-              <div key={s.name}>
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm font-medium">{s.name}</span>
-                  <span className="text-sm text-white/60">{s.pct}%</span>
-                </div>
-
-                {/* PROGRESS BAR */}
-                <div className="w-full h-3 rounded-full bg-white/10 overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${s.pct}%` }}
-                    transition={{ duration: 1 }}
-                    className="
-                      h-full rounded-full
-                      bg-gradient-to-r from-[#c770c7] to-[#6f5cff]
-                      shadow-[0_0_10px_rgba(199,112,199,0.5)]
-                    "
-                  ></motion.div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <h4 className="text-accent font-bold text-xl">Tech Stack</h4>
+          <SkillCategoryGroup categories={stackCategories} />
         </motion.div>
 
-        {/* RIGHT — TOOLS CARD */}
+        {/* RIGHT — WORKFLOW & TOOLS */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -88,25 +124,8 @@ export default function Skills() {
             border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
           "
         >
-          <h4 className="text-accent font-bold text-xl">
-            Tools & Technologies
-          </h4>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            {tools.map((t) => (
-              <motion.span
-                key={t}
-                whileHover={{ scale: 1.08 }}
-                className="
-                  px-4 py-2 rounded-full text-sm
-                  bg-white/5 border border-white/10 backdrop-blur-md
-                  text-white/80 shadow-[0_4px_10px_rgba(0,0,0,0.2)]
-                "
-              >
-                {t}
-              </motion.span>
-            ))}
-          </div>
+          <h4 className="text-accent font-bold text-xl">Workflow</h4>
+          <SkillCategoryGroup categories={workflowCategories} />
 
           <div className="mt-8">
             <h4 className="text-accent font-bold text-lg">Other Skills</h4>
