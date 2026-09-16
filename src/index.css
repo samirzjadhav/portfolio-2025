@@ -11,7 +11,7 @@
 /* Then your custom CSS */
 :root {
   --accent: #c770c7 !important;
-  --accent-2: #5361;
+  --accent-2: #6f5cff;
 }
 
 /* Base tweaks */
@@ -28,11 +28,18 @@ body {
   font-family: "Dancing Script", cursive;
 }
 
-/* Tailwind-styled underline for section titles */
+.subtle {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Section titles */
 .section-title {
   position: relative;
   display: inline-block;
   font-family: "Dancing Script", cursive;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
 }
 
 .section-title::after {
@@ -133,13 +140,6 @@ body {
   height: 100%;
   background: linear-gradient(90deg, #c770c7, #6f5cff);
   border-radius: 999px;
-}
-
-/* Section titles */
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #fff;
 }
 
 .section-sub {
