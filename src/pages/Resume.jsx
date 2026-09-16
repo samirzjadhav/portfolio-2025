@@ -2,19 +2,27 @@ import React from "react";
 import { motion } from "framer-motion";
 import pdfFile from "../assets/samirzjadhav-resume.pdf";
 import Navbar from "../components/Navbar";
+import SkipToContent from "../components/SkipToContent";
 import VisitorCounter from "../components/VisitorCounter";
+import { PAGE_META } from "../config/site";
+import { usePageMeta } from "../hooks/usePageMeta";
 
 export default function ResumePage() {
+  usePageMeta(PAGE_META.resume);
+
   return (
     <>
       {/* NAVBAR */}
       <div className="resume-nav-fix">
+        <SkipToContent />
         <Navbar />
       </div>
       <VisitorCounter />
 
       {/* PAGE WRAPPER */}
-      <div
+      <main
+        id="main-content"
+        tabIndex={-1}
         className="min-h-screen px-6 py-24 md:py-28 
                       bg-gradient-to-br from-[#07030b] via-[#0f0916] to-[#05020a] 
                       text-white"
@@ -164,7 +172,7 @@ export default function ResumePage() {
             <p className="text-white/60">RTMNU University</p>
           </motion.div>
         </div>
-      </div>
+      </main>
     </>
   );
 }
