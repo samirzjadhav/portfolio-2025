@@ -1,14 +1,14 @@
-import React from "react";
+import React, { memo } from "react";
 import { motion } from "framer-motion";
 
-export default function FeaturedProject({ project }) {
+function FeaturedProject({ project }) {
   if (!project) return null;
 
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false }}
+      viewport={{ once: true }}
       transition={{ duration: 0.7 }}
       className="mt-20"
     >
@@ -36,7 +36,9 @@ export default function FeaturedProject({ project }) {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
             src={project.img}
-            alt={project.title}
+            alt={`${project.title} project screenshot`}
+            loading="lazy"
+            decoding="async"
             className="w-full h-80 object-cover rounded-2xl group-hover:scale-105 transition-all duration-500"
           />
 
@@ -45,19 +47,31 @@ export default function FeaturedProject({ project }) {
 
           {/* TEXT OVERLAY */}
           <div className="absolute bottom-6 left-6 right-6">
-            <h4 className="text-3xl font-bold tracking-wide">
+            <p className="text-accent text-sm font-semibold tracking-wide">
+              {project.shortDesc}
+            </p>
+
+            <h4 className="text-3xl font-bold tracking-wide mt-1">
               {project.title}
             </h4>
 
-            <p className="text-white/70 text-sm mt-2 max-w-lg">
-              {project.description ||
-                "A polished, responsive and modern project built with React & Tailwind."}
+            <p className="text-white/75 text-sm mt-2 max-w-lg leading-relaxed">
+              {project.description}
             </p>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <span key={tag} className="chip text-xs">
+                  {tag}
+                </span>
+              ))}
+            </div>
 
             <div className="mt-5 flex gap-4">
               <motion.a
                 href={project.demo}
                 target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.08 }}
                 className="btn-accent text-sm px-4 py-2"
               >
@@ -67,6 +81,7 @@ export default function FeaturedProject({ project }) {
               <motion.a
                 href={project.code}
                 target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.08 }}
                 className="glass px-4 py-2 rounded-md text-sm"
               >
@@ -86,22 +101,29 @@ export default function FeaturedProject({ project }) {
             border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.35)]
           "
         >
-          <h4 className="text-accent font-bold text-xl">Overview</h4>
+          <p className="text-accent text-sm font-semibold">{project.shortDesc}</p>
 
-          <p className="section-sub mt-4 leading-relaxed">
-            {project.overview ||
-              "This featured project showcases advanced React architecture, responsive UI, animations, and clean reusable components with modern styling."}
+          <h4 className="text-accent font-bold text-xl mt-1">Overview</h4>
+
+          <p className="section-sub mt-4 leading-relaxed">{project.overview}</p>
+
+          <p className="section-sub mt-4 leading-relaxed text-white/70">
+            {project.description}
           </p>
 
-          <h5 className="font-semibold mt-6 text-lg">Tech Highlights</h5>
+          <h5 className="font-semibold mt-6 text-lg">Tech Stack</h5>
 
-          <ul className="mt-3 space-y-2 text-white/70">
-            {project.tags.map((tag, index) => (
-              <li key={index}>• {tag}</li>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <span key={tag} className="chip text-sm">
+                {tag}
+              </span>
             ))}
-          </ul>
+          </div>
         </motion.div>
       </div>
     </motion.section>
   );
 }
+
+export default memo(FeaturedProject);
