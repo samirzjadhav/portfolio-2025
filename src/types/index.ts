@@ -28,4 +28,14 @@ export type {
   ContactFormField,
   ContactFormConfig,
 } from "./contact";
-export type { EmailServiceConfig } from "./email";
+export type {
+  ApiSuccessResponse,
+  ApiErrorResponse,
+  ApiResponse,
+  ProjectListResponse,
+} from "./api";
+export type {
+  MessageInput,
+  CreateMessageResult,
+  ContactFormStatus,
+} from "./message";

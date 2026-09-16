@@ -3,5 +3,7 @@ export {
   fetchGitHubDashboard,
   getContributionChartUrl,
 } from "./githubService";
-export { sendContactEmail } from "./emailService";
+export { apiRequest, ApiError } from "./apiClient";
+export { fetchProjects, fetchProjectBySlug } from "./projectService";
+export { sendMessage } from "./messageService";
 export { incrementVisitCount } from "./visitorService";
