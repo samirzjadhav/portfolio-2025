@@ -1,7 +1,6 @@
-import React from "react";
 import { motion } from "framer-motion";
 import heroImg from "../assets/home-main.svg";
-import heroBg from "../assets/home-bg.jpg"; // <-- IMPORT BG HERE
+import heroBg from "../assets/home-bg.jpg";
 
 export default function Hero() {
   return (
@@ -9,11 +8,10 @@ export default function Hero() {
       id="home"
       className="min-h-[100vh] md:min-h-[90vh] flex items-center bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: `url(${heroBg})`, // <-- APPLY BG HERE
+        backgroundImage: `url(${heroBg})`,
       }}
     >
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-8 items-center">
-        {/* LEFT TEXT */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -80,7 +78,6 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* RIGHT IMAGE */}
         <motion.div
           className="flex justify-center"
           initial={{ opacity: 0, scale: 0.85 }}

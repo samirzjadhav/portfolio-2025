@@ -1,6 +1,6 @@
-import React from "react";
 import profile from "../assets/Projects/profile.jpg";
 import { motion } from "framer-motion";
+import { contactInfo, socialLinks } from "../data/contact";
 
 export default function About() {
   return (
@@ -28,15 +28,15 @@ export default function About() {
 
           <p className="section-sub mt-4">
             Hi there, I'm{" "}
-            <span className="text-accent font-semibold">Samir Jadhav</span> — a
-            passionate Frontend Engineer who loves building modern, clean, and
-            user-friendly web experiences. My journey into web development began
-            with curiosity, and over time it evolved into something I truly
-            enjoy and take pride in.
+            <span className="text-accent font-semibold">{contactInfo.name}</span>{" "}
+            — a passionate Frontend Engineer who loves building modern, clean,
+            and user-friendly web experiences. My journey into web development
+            began with curiosity, and over time it evolved into something I
+            truly enjoy and take pride in.
           </p>
 
           <p className="section-sub mt-4">
-            I’ve worked on everything from UI components to fully responsive
+            I've worked on everything from UI components to fully responsive
             websites and complete React applications. What motivates me is the
             process of turning a blank screen into something meaningful,
             interactive, and visually appealing. I love creating smooth
@@ -46,39 +46,24 @@ export default function About() {
           <p className="section-sub mt-4">
             Outside of coding, I spend time learning new technologies, reading
             dev blogs, exploring animations, and studying scalable front-end
-            patterns. I’m excited to continue growing as a developer and
+            patterns. I'm excited to continue growing as a developer and
             contribute to impactful, real-world projects while helping brands
             and creators build great digital experiences.
           </p>
 
           <div className="mt-6 flex gap-3">
-            <a
-              href="https://github.com/samirzjadhav"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub profile"
-              className="glass p-3"
-            >
-              <i className="bx bxl-github" aria-hidden="true"></i>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/samirzjadhav"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn profile"
-              className="glass p-3"
-            >
-              <i className="bx bxl-linkedin" aria-hidden="true"></i>
-            </a>
-            <a
-              href="https://twitter.com/samirzjadhav"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Twitter profile"
-              className="glass p-3"
-            >
-              <i className="bx bxl-twitter" aria-hidden="true"></i>
-            </a>
+            {socialLinks.map((link) => (
+              <a
+                key={link.platform}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                className="glass p-3"
+              >
+                <i className={`bx ${link.icon}`} aria-hidden="true"></i>
+              </a>
+            ))}
           </div>
         </div>
       </div>

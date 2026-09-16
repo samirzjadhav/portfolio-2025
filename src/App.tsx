@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -8,17 +8,18 @@ import ProjectsGrid from "./components/ProjectsGrid";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import SkipToContent from "./components/SkipToContent";
-import projects from "./data/project";
+import { projects } from "./data";
 import VisitorCounter from "./components/VisitorCounter";
 import { PAGE_META } from "./config/site";
 import { usePageMeta } from "./hooks/usePageMeta";
 import { useScrollSpy } from "./hooks/useScrollSpy";
+import type { Project } from "./types";
 
 export default function App() {
   usePageMeta(PAGE_META.home);
   const activeSection = useScrollSpy();
-  const [activeProject, setActiveProject] = useState(projects[0]);
-  const handleProjectSelect = useCallback((project) => {
+  const [activeProject, setActiveProject] = useState<Project>(projects[0]);
+  const handleProjectSelect = useCallback((project: Project) => {
     setActiveProject(project);
   }, []);
 

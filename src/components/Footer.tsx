@@ -1,23 +1,17 @@
-import React from "react";
 import { motion } from "framer-motion";
+import { socialLinks } from "../data/contact";
+import { footerNavLinks } from "../data/navigation";
 
 export default function Footer() {
   return (
     <footer className="mt-20 py-12 border-t border-white/10">
       <div className="max-w-6xl mx-auto px-6">
-        {/* TOP — NAV LINKS */}
         <div className="flex flex-wrap justify-center gap-6 mb-10 text-white/70">
-          {[
-            { name: "Home", link: "#home" },
-            { name: "About", link: "#about" },
-            { name: "Skills", link: "#skills" },
-            { name: "Projects", link: "#portfolio" },
-            { name: "Contact", link: "#contact" },
-          ].map((item) => (
+          {footerNavLinks.map((item) => (
             <motion.a
               whileHover={{ scale: 1.1, color: "#c770c7" }}
               key={item.name}
-              href={item.link}
+              href={item.href}
               className="transition font-medium tracking-wide"
             >
               {item.name}
@@ -25,29 +19,12 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* MIDDLE — SOCIAL ICONS */}
         <div className="flex justify-center gap-5 mb-10">
-          {[
-            {
-              icon: "bxl-github",
-              link: "https://github.com/samirzjadhav",
-              label: "GitHub profile",
-            },
-            {
-              icon: "bxl-linkedin",
-              link: "https://linkedin.com/in/samirjadhav",
-              label: "LinkedIn profile",
-            },
-            {
-              icon: "bxl-twitter",
-              link: "https://twitter.com/samirzjadhav",
-              label: "Twitter profile",
-            },
-          ].map((item) => (
+          {socialLinks.map((item) => (
             <motion.a
               whileHover={{ scale: 1.15 }}
-              key={item.icon}
-              href={item.link}
+              key={item.platform}
+              href={item.url}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={item.label}
@@ -61,7 +38,6 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* BOTTOM — COPYRIGHT */}
         <div className="text-center text-white/60 leading-relaxed">
           <p>
             © {new Date().getFullYear()}{" "}

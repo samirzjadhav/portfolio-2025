@@ -1,5 +1,15 @@
-import React from "react";
 import { motion } from "framer-motion";
+
+type AriaLiveValue = "polite" | "assertive" | "off";
+
+interface GitHubStateCardProps {
+  title: string;
+  message: string;
+  actionLabel?: string;
+  onAction?: () => void;
+  role?: "status" | "alert";
+  ariaLive?: AriaLiveValue;
+}
 
 export default function GitHubStateCard({
   title,
@@ -8,7 +18,7 @@ export default function GitHubStateCard({
   onAction,
   role = "status",
   ariaLive = "polite",
-}) {
+}: GitHubStateCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

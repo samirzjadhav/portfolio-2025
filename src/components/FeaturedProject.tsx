@@ -1,9 +1,12 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { motion } from "framer-motion";
+import type { Project } from "../types";
 
-function FeaturedProject({ project }) {
-  if (!project) return null;
+interface FeaturedProjectProps {
+  project: Project;
+}
 
+function FeaturedProject({ project }: FeaturedProjectProps) {
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
@@ -12,13 +15,11 @@ function FeaturedProject({ project }) {
       transition={{ duration: 0.7 }}
       className="mt-20"
     >
-      {/* Section Title */}
       <div className="relative inline-block">
         <h3 className="section-title">Featured Project</h3>
       </div>
 
       <div className="mt-10 grid md:grid-cols-2 gap-10 items-center">
-        {/* LEFT — FEATURED IMAGE CARD */}
         <motion.div
           className="
             relative rounded-2xl overflow-hidden 
@@ -29,7 +30,6 @@ function FeaturedProject({ project }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          {/* Image */}
           <motion.img
             key={project.id}
             initial={{ scale: 1.05, opacity: 0 }}
@@ -42,10 +42,8 @@ function FeaturedProject({ project }) {
             className="w-full h-80 object-cover rounded-2xl group-hover:scale-105 transition-all duration-500"
           />
 
-          {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 
-          {/* TEXT OVERLAY */}
           <div className="absolute bottom-6 left-6 right-6">
             <p className="text-accent text-sm font-semibold tracking-wide">
               {project.shortDesc}
@@ -91,7 +89,6 @@ function FeaturedProject({ project }) {
           </div>
         </motion.div>
 
-        {/* RIGHT — DETAILS CARD */}
         <motion.div
           initial={{ opacity: 0, x: 25 }}
           animate={{ opacity: 1, x: 0 }}

@@ -1,14 +1,8 @@
-import React, { useState } from "react";
-
-function readVisitCount() {
-  const stored = localStorage.getItem("visit-count");
-  const total = stored ? parseInt(stored, 10) + 1 : 1;
-  localStorage.setItem("visit-count", String(total));
-  return total;
-}
+import { useState } from "react";
+import { incrementVisitCount } from "../services";
 
 export default function VisitorCounter() {
-  const [visits] = useState(readVisitCount);
+  const [visits] = useState(incrementVisitCount);
 
   return (
     <div

@@ -1,10 +1,10 @@
-import React from "react";
 import { motion } from "framer-motion";
 import pdfFile from "../assets/samirzjadhav-resume.pdf";
 import Navbar from "../components/Navbar";
 import SkipToContent from "../components/SkipToContent";
 import VisitorCounter from "../components/VisitorCounter";
 import { PAGE_META } from "../config/site";
+import { contactInfo } from "../data/contact";
 import { usePageMeta } from "../hooks/usePageMeta";
 
 export default function ResumePage() {
@@ -12,14 +12,12 @@ export default function ResumePage() {
 
   return (
     <>
-      {/* NAVBAR */}
       <div className="resume-nav-fix">
         <SkipToContent />
         <Navbar />
       </div>
       <VisitorCounter />
 
-      {/* PAGE WRAPPER */}
       <main
         id="main-content"
         tabIndex={-1}
@@ -28,7 +26,6 @@ export default function ResumePage() {
                       text-white"
       >
         <div className="max-w-5xl mx-auto">
-          {/* PAGE TITLE */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -37,7 +34,6 @@ export default function ResumePage() {
             My Resume
           </motion.h1>
 
-          {/* DOWNLOAD BUTTON */}
           <div className="flex justify-center mb-10">
             <a
               href={pdfFile}
@@ -48,52 +44,43 @@ export default function ResumePage() {
             </a>
           </div>
 
-          {/* RESUME CARD */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="glass p-10 rounded-2xl border border-white/10"
           >
-            {/* HEADER */}
-            <h2 className="text-2xl font-bold">Samir Jadhav</h2>
-            <p className="text-white/70">Web Engineer</p>
+            <h2 className="text-2xl font-bold">{contactInfo.name}</h2>
+            <p className="text-white/70">{contactInfo.title}</p>
 
             <div className="mt-4 text-white/70 space-y-1">
-              <p>📧 samirzjadhav@gmail.com</p>
-              <p>📞 +91 7620647351</p>
+              <p>📧 {contactInfo.email}</p>
+              <p>📞 {contactInfo.phone}</p>
               <p>
                 🔗{" "}
-                <a href="https://samirj.vercel.app/" className="text-accent">
-                  samirj.vercel.app
+                <a href={contactInfo.portfolioUrl} className="text-accent">
+                  {contactInfo.portfolioUrl.replace(/^https:\/\//, "")}
                 </a>
               </p>
               <p>
                 🧑‍💻{" "}
-                <a
-                  href="https://github.com/samirzjadhav"
-                  className="text-accent"
-                >
-                  github.com/samirzjadhav
+                <a href={contactInfo.githubUrl} className="text-accent">
+                  {contactInfo.githubUrl.replace(/^https:\/\//, "")}
                 </a>
               </p>
               <p>
                 💼{" "}
-                <a
-                  href="https://linkedin.com/in/samirzjadhav"
-                  className="text-accent"
-                >
-                  linkedin.com/in/samirzjadhav
+                <a href={contactInfo.linkedinUrl} className="text-accent">
+                  {contactInfo.linkedinUrl.replace(/^https:\/\//, "")}
                 </a>
               </p>
             </div>
 
             <hr className="my-6 border-white/10" />
 
-            {/* SUMMARY */}
             <h3 className="text-xl font-semibold mb-2">Summary</h3>
             <p className="text-white/70 leading-relaxed">
-              I’m Samir, a frontend engineer passionate about building clean,
+              I'm Samir, a frontend engineer passionate about building clean,
               engaging and user-friendly web experiences. I'm skilled in React,
               Next.js, Tailwind, JavaScript, HTML and CSS. I enjoy turning ideas
               into functional projects and creating impactful UI experiences.
@@ -101,7 +88,6 @@ export default function ResumePage() {
 
             <hr className="my-6 border-white/10" />
 
-            {/* SKILLS */}
             <h3 className="text-xl font-semibold mb-2">Professional Skills</h3>
             <div className="text-white/70 leading-relaxed space-y-1">
               <p>
@@ -119,7 +105,6 @@ export default function ResumePage() {
 
             <hr className="my-6 border-white/10" />
 
-            {/* EXPERIENCE */}
             <h3 className="text-xl font-semibold mb-2">Work Experience</h3>
             <h4 className="font-bold">Web Engineer @ Propacity (Internship)</h4>
             <p className="text-white/60">Apr 2024 – Oct 2024</p>
@@ -143,7 +128,6 @@ export default function ResumePage() {
 
             <hr className="my-6 border-white/10" />
 
-            {/* PROJECTS */}
             <h3 className="text-xl font-semibold mb-2">Personal Projects</h3>
             <ul className="list-disc pl-6 text-white/70 space-y-2">
               <li>Chocolate Milk Brand Landing Page</li>
@@ -153,7 +137,6 @@ export default function ResumePage() {
 
             <hr className="my-6 border-white/10" />
 
-            {/* ACHIEVEMENTS */}
             <h3 className="text-xl font-semibold mb-2">Achievements</h3>
             <ul className="list-disc pl-6 text-white/70 space-y-2">
               <li>Completed GSOC (GirlScript Summer of Code)</li>
@@ -164,10 +147,9 @@ export default function ResumePage() {
 
             <hr className="my-6 border-white/10" />
 
-            {/* EDUCATION */}
             <h3 className="text-xl font-semibold mb-2">Education</h3>
             <p className="text-white/70">
-              Bachelor’s in Computer Science (2022–2025)
+              Bachelor's in Computer Science (2022–2025)
             </p>
             <p className="text-white/60">RTMNU University</p>
           </motion.div>

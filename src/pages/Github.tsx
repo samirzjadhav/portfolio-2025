@@ -1,15 +1,20 @@
-import React from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import SkipToContent from "../components/SkipToContent";
 import VisitorCounter from "../components/VisitorCounter";
 import GitHubStateCard from "../components/GitHubStateCard";
-import { GITHUB_USERNAME } from "../api/github";
+import { GITHUB_USERNAME, getContributionChartUrl } from "../services";
 import { PAGE_META } from "../config/site";
+import { contactInfo, socialLinks } from "../data/contact";
 import { useGitHubData } from "../hooks/useGitHubData";
 import { usePageMeta } from "../hooks/usePageMeta";
+import type { GitHubProfile, GitHubRepo } from "../types";
 
-function GitHubProfileCard({ profile }) {
+interface GitHubProfileCardProps {
+  profile: GitHubProfile;
+}
+
+function GitHubProfileCard({ profile }: GitHubProfileCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -21,14 +26,14 @@ function GitHubProfileCard({ profile }) {
         flex flex-col md:flex-row items-center gap-6 sm:gap-8
       "
     >
-            <img
-              src={profile.avatar_url}
-              alt={`${profile.name || profile.login} GitHub avatar`}
-              loading="lazy"
-              decoding="async"
-              className="w-32 h-32 sm:w-48 sm:h-48 md:w-56 md:h-56 
-                         rounded-full border-4 border-accent shadow-xl"
-            />
+      <img
+        src={profile.avatar_url}
+        alt={`${profile.name || profile.login} GitHub avatar`}
+        loading="lazy"
+        decoding="async"
+        className="w-32 h-32 sm:w-48 sm:h-48 md:w-56 md:h-56 
+                   rounded-full border-4 border-accent shadow-xl"
+      />
 
       <div className="flex-1 text-center md:text-left">
         <h2 className="text-2xl sm:text-3xl font-bold">
@@ -59,7 +64,7 @@ function GitHubProfileCard({ profile }) {
           </a>
 
           <a
-            href="https://samirjadhav.vercel.app"
+            href={contactInfo.portfolioUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="glass px-4 py-2 rounded-lg"
@@ -67,30 +72,30 @@ function GitHubProfileCard({ profile }) {
             Portfolio
           </a>
 
-          <a
-            href="https://twitter.com/samirzjadhav"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="glass px-4 py-2 rounded-lg"
-          >
-            Twitter
-          </a>
-
-          <a
-            href="https://linkedin.com/in/samirzjadhav"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="glass px-4 py-2 rounded-lg"
-          >
-            LinkedIn
-          </a>
+          {socialLinks
+            .filter((link) => link.platform !== "github")
+            .map((link) => (
+              <a
+                key={link.platform}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass px-4 py-2 rounded-lg"
+              >
+                {link.platform === "twitter" ? "Twitter" : "LinkedIn"}
+              </a>
+            ))}
         </div>
       </div>
     </motion.div>
   );
 }
 
-function GitHubRepoCard({ repo }) {
+interface GitHubRepoCardProps {
+  repo: GitHubRepo;
+}
+
+function GitHubRepoCard({ repo }: GitHubRepoCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -193,7 +198,7 @@ export default function GitHub() {
         {isError && (
           <GitHubStateCard
             title="Unable to load GitHub data"
-            message={error}
+            message={error ?? "Unable to load GitHub dashboard data."}
             actionLabel="Try again"
             onAction={retry}
             role="alert"
@@ -212,7 +217,7 @@ export default function GitHub() {
 
           <div className="contribution-graph-wrapper">
             <img
-              src={`https://ghchart.rshah.org/6f5cff/${GITHUB_USERNAME}`}
+              src={getContributionChartUrl()}
               alt={`GitHub contribution activity chart for ${GITHUB_USERNAME}`}
               loading="lazy"
               decoding="async"

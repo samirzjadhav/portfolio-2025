@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+import { sectionNavLinks } from "../data/navigation";
+import type { SectionId } from "../types";
 
-export default function Navbar({ activeSection }) {
+interface NavbarProps {
+  activeSection?: SectionId;
+}
+
+export default function Navbar({ activeSection }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
@@ -12,7 +18,7 @@ export default function Navbar({ activeSection }) {
   useEffect(() => {
     if (!open) return;
 
-    const handleEscape = (event) => {
+    const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
 
@@ -20,9 +26,13 @@ export default function Navbar({ activeSection }) {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [open]);
 
-  // Highlight only real routes
-  const isRouteActive = (path) =>
+  const isRouteActive = (path: string): string =>
     location.pathname === path
+      ? "text-accent font-semibold"
+      : "subtle hover:text-accent";
+
+  const sectionLinkClass = (section: SectionId): string =>
+    activeSection === section
       ? "text-accent font-semibold"
       : "subtle hover:text-accent";
 
@@ -41,7 +51,6 @@ export default function Navbar({ activeSection }) {
     >
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          {/* LOGO */}
           <Link
             to="/"
             aria-label="Samir Jadhav — Home"
@@ -51,7 +60,6 @@ export default function Navbar({ activeSection }) {
             <span className="text-accent">Jadhav</span>
           </Link>
 
-          {/* DESKTOP NAV */}
           <nav
             className="hidden md:flex gap-8 items-center"
             aria-label="Primary navigation"
@@ -68,57 +76,27 @@ export default function Navbar({ activeSection }) {
               Resume
             </Link>
 
-            {/* Internal sections only visible on Home */}
             {!hideSections && (
               <>
-                <a
-                  href="#about"
-                  className={
-                    activeSection === "about"
-                      ? "text-accent font-semibold"
-                      : "subtle hover:text-accent"
-                  }
-                >
+                <a href="#about" className={sectionLinkClass("about")}>
                   About
                 </a>
 
-                <a
-                  href="#skills"
-                  className={
-                    activeSection === "skills"
-                      ? "text-accent font-semibold"
-                      : "subtle hover:text-accent"
-                  }
-                >
+                <a href="#skills" className={sectionLinkClass("skills")}>
                   Skills
                 </a>
 
-                <a
-                  href="#portfolio"
-                  className={
-                    activeSection === "portfolio"
-                      ? "text-accent font-semibold"
-                      : "subtle hover:text-accent"
-                  }
-                >
+                <a href="#portfolio" className={sectionLinkClass("portfolio")}>
                   Projects
                 </a>
 
-                <a
-                  href="#contact"
-                  className={
-                    activeSection === "contact"
-                      ? "text-accent font-semibold"
-                      : "subtle hover:text-accent"
-                  }
-                >
+                <a href="#contact" className={sectionLinkClass("contact")}>
                   Contact
                 </a>
               </>
             )}
           </nav>
 
-          {/* MOBILE MENU BUTTON */}
           <div className="md:hidden flex items-center gap-3">
             <button
               type="button"
@@ -134,7 +112,6 @@ export default function Navbar({ activeSection }) {
         </div>
       </div>
 
-      {/* MOBILE MENU */}
       {open && (
         <motion.div
           id="mobile-navigation"
@@ -159,7 +136,6 @@ export default function Navbar({ activeSection }) {
             }}
             className="glass p-4 mt-3 rounded-xl space-y-3 "
           >
-            {/* Animation Variant for Each Link */}
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: 8 },
@@ -205,30 +181,20 @@ export default function Navbar({ activeSection }) {
               </Link>
             </motion.div>
 
-            {/* ONLY SHOW WHEN NOT ON /resume OR /github */}
             {!hideSections && (
               <>
-                {[
-                  { name: "About", id: "#about", key: "about" },
-                  { name: "Skills", id: "#skills", key: "skills" },
-                  { name: "Projects", id: "#portfolio", key: "portfolio" },
-                  { name: "Contact", id: "#contact", key: "contact" },
-                ].map((sec) => (
+                {sectionNavLinks.map((sec) => (
                   <motion.div
-                    key={sec.key}
+                    key={sec.section}
                     variants={{
                       hidden: { opacity: 0, y: 8 },
                       visible: { opacity: 1, y: 0 },
                     }}
                   >
                     <a
-                      href={sec.id}
+                      href={sec.href}
                       onClick={() => setOpen(false)}
-                      className={
-                        activeSection === sec.key
-                          ? "text-accent font-semibold"
-                          : "subtle hover:text-accent"
-                      }
+                      className={sectionLinkClass(sec.section)}
                     >
                       {sec.name}
                     </a>

@@ -1,55 +1,16 @@
-import React from "react";
 import { motion } from "framer-motion";
+import {
+  skillsData,
+  stackCategories,
+  workflowCategories,
+} from "../data/skills";
+import type { SkillCategory } from "../types";
 
-const skillCategories = [
-  {
-    title: "Frontend",
-    items: [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "TypeScript",
-      "React",
-      "Next.js",
-      "Tailwind CSS",
-      "Framer Motion",
-    ],
-  },
-  {
-    title: "Backend",
-    items: ["Node.js", "Express.js", "REST APIs"],
-  },
-  {
-    title: "Database",
-    items: ["MongoDB", "Firebase"],
-  },
-  {
-    title: "Testing",
-    items: ["Jest", "Vitest", "React Testing Library"],
-  },
-  {
-    title: "Tools",
-    items: [
-      "VS Code",
-      "Git",
-      "GitHub",
-      "Vercel",
-      "NPM",
-      "Figma",
-      "Linux",
-    ],
-  },
-];
+interface SkillChipProps {
+  label: string;
+}
 
-const stackCategories = skillCategories.filter(({ title }) =>
-  ["Frontend", "Backend", "Database"].includes(title)
-);
-
-const workflowCategories = skillCategories.filter(({ title }) =>
-  ["Testing", "Tools"].includes(title)
-);
-
-function SkillChip({ label }) {
+function SkillChip({ label }: SkillChipProps) {
   return (
     <motion.span
       whileHover={{ scale: 1.08 }}
@@ -64,7 +25,11 @@ function SkillChip({ label }) {
   );
 }
 
-function SkillCategoryGroup({ categories }) {
+interface SkillCategoryGroupProps {
+  categories: SkillCategory[];
+}
+
+function SkillCategoryGroup({ categories }: SkillCategoryGroupProps) {
   return (
     <div className="space-y-8">
       {categories.map(({ title, items }) => (
@@ -91,7 +56,6 @@ export default function Skills() {
       transition={{ duration: 0.7 }}
       className="py-16 mt-12"
     >
-      {/* TITLE */}
       <div className="relative inline-block">
         <h3 className="section-title">Skills</h3>
       </div>
@@ -100,7 +64,6 @@ export default function Skills() {
       </p>
 
       <div className="mt-12 grid md:grid-cols-2 gap-10">
-        {/* LEFT — STACK */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -114,7 +77,6 @@ export default function Skills() {
           <SkillCategoryGroup categories={stackCategories} />
         </motion.div>
 
-        {/* RIGHT — WORKFLOW & TOOLS */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -130,9 +92,7 @@ export default function Skills() {
           <div className="mt-8">
             <h4 className="text-accent font-bold text-lg">Other Skills</h4>
             <p className="section-sub mt-2 leading-relaxed text-white/70">
-              UI/UX basics, component-driven development, animation integration,
-              responsive-first design, deployment workflows, and performance
-              optimization.
+              {skillsData.otherSkillsDescription}
             </p>
           </div>
         </motion.div>

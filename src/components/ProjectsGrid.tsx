@@ -1,18 +1,27 @@
-import React, { memo } from "react";
-import projects from "../data/project";
+import { memo } from "react";
+import type { KeyboardEvent, MouseEvent } from "react";
+import { projects } from "../data";
 import { motion } from "framer-motion";
+import type { Project } from "../types";
 
-function handleProjectKeyDown(event, project, onSelect) {
+interface ProjectsGridProps {
+  onSelect: (project: Project) => void;
+}
+
+function handleProjectKeyDown(
+  event: KeyboardEvent<HTMLDivElement>,
+  project: Project,
+  onSelect: (project: Project) => void
+): void {
   if (event.key === "Enter" || event.key === " ") {
     event.preventDefault();
     onSelect(project);
   }
 }
 
-function ProjectsGrid({ onSelect }) {
+function ProjectsGrid({ onSelect }: ProjectsGridProps) {
   return (
     <section id="portfolio" className="mt-20">
-      {/* Section Title */}
       <div className="relative inline-block">
         <h3 className="section-title">All Projects</h3>
       </div>
@@ -22,7 +31,6 @@ function ProjectsGrid({ onSelect }) {
         demo directly.
       </p>
 
-      {/* PROJECT GRID */}
       <div className="mt-10 grid sm:grid-cols-2 md:grid-cols-3 gap-8">
         {projects.map((p) => (
           <motion.div
@@ -40,7 +48,6 @@ function ProjectsGrid({ onSelect }) {
               shadow-[0_12px_40px_rgba(0,0,0,0.45)]
             "
           >
-            {/* IMAGE */}
             <img
               src={p.img}
               alt={`${p.title} project preview`}
@@ -52,7 +59,6 @@ function ProjectsGrid({ onSelect }) {
               "
             />
 
-            {/* GRADIENT OVERLAY */}
             <div
               className="
                 absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-transparent
@@ -60,7 +66,6 @@ function ProjectsGrid({ onSelect }) {
               "
             ></div>
 
-            {/* CONTENT */}
             <div className="absolute bottom-0 left-0 right-0 p-5">
               <h4 className="text-lg font-bold tracking-wide leading-snug">
                 {p.title}
@@ -74,7 +79,6 @@ function ProjectsGrid({ onSelect }) {
                 {p.description}
               </p>
 
-              {/* TAGS */}
               <div className="mt-3 flex flex-wrap gap-2">
                 {p.tags.map((tag) => (
                   <span
@@ -90,13 +94,14 @@ function ProjectsGrid({ onSelect }) {
                 ))}
               </div>
 
-              {/* BUTTONS */}
               <div className="mt-4 flex gap-3">
                 <motion.a
                   href={p.demo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e: MouseEvent<HTMLAnchorElement>) =>
+                    e.stopPropagation()
+                  }
                   whileHover={{ scale: 1.08 }}
                   className="btn-accent text-xs px-3 py-2"
                 >
@@ -107,7 +112,9 @@ function ProjectsGrid({ onSelect }) {
                   href={p.code}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e: MouseEvent<HTMLAnchorElement>) =>
+                    e.stopPropagation()
+                  }
                   whileHover={{ scale: 1.08 }}
                   className="glass px-3 py-2 rounded-md text-xs"
                 >

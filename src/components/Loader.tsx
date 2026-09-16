@@ -1,4 +1,3 @@
-import React from "react";
 import preSvg from "../assets/pre.svg";
 
 export default function Loader() {
