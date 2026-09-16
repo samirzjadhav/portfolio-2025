@@ -1,4 +1,3 @@
-export { default as projects } from "./project";
 export {
   skillCategories,
   skillsData,

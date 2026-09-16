@@ -1,10 +1,10 @@
 import { memo } from "react";
 import type { KeyboardEvent, MouseEvent } from "react";
-import { projects } from "../data";
 import { motion } from "framer-motion";
 import type { Project } from "../types";
 
 interface ProjectsGridProps {
+  projects: Project[];
   onSelect: (project: Project) => void;
 }
 
@@ -19,7 +19,7 @@ function handleProjectKeyDown(
   }
 }
 
-function ProjectsGrid({ onSelect }: ProjectsGridProps) {
+function ProjectsGrid({ projects, onSelect }: ProjectsGridProps) {
   return (
     <section id="portfolio" className="mt-20">
       <div className="relative inline-block">

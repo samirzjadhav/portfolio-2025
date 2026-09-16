@@ -9,6 +9,7 @@ import type { Project } from "../types";
 const projects: Project[] = [
   {
     id: "p1",
+    slug: "youtube-clone",
     title: "YouTube Clone",
     img: p1Img,
     demo: "https://youtube-clone-flax-iota.vercel.app/",
@@ -35,6 +36,7 @@ const projects: Project[] = [
   },
   {
     id: "p2",
+    slug: "techbomb-business-website",
     title: "TechBomb — Business Website",
     img: p2Img,
     demo: "https://techbomb-website.vercel.app/",
@@ -61,6 +63,7 @@ const projects: Project[] = [
   },
   {
     id: "p3",
+    slug: "shopease-stripe-store",
     title: "ShopEase — Stripe Store",
     img: p3Img,
     demo: "https://react-ecommerce-website-six.vercel.app/",
@@ -87,6 +90,7 @@ const projects: Project[] = [
   },
   {
     id: "p4",
+    slug: "cartflow-context-store",
     title: "CartFlow — Context Store",
     img: p4Img,
     demo: "https://react-ecommerce-web-theta.vercel.app/",
@@ -113,6 +117,7 @@ const projects: Project[] = [
   },
   {
     id: "p5",
+    slug: "foodies-delivery-ui",
     title: "Foodies — Delivery UI",
     img: p5Img,
     demo: "https://foodies-website-one.vercel.app/",
@@ -139,6 +144,7 @@ const projects: Project[] = [
   },
   {
     id: "p6",
+    slug: "valorant-agents-directory",
     title: "Valorant Agents Directory",
     img: p6Img,
     demo: "https://valorant-agents-pearl.vercel.app/",
