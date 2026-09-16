@@ -88,7 +88,13 @@ export default function Hero() {
           transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
         >
           <div className="feature-layer glass-strong p-6 rounded-2xl">
-            <img src={heroImg} alt="hero" className="w-[320px] md:w-[420px]" />
+            <img
+              src={heroImg}
+              alt="Illustration of a developer working at a desk with a laptop"
+              fetchPriority="high"
+              decoding="async"
+              className="w-[320px] md:w-[420px]"
+            />
           </div>
         </motion.div>
       </div>

@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
-import "../index.css";
 
 export default function Navbar({ activeSection }) {
   const [open, setOpen] = useState(false);
@@ -9,6 +8,17 @@ export default function Navbar({ activeSection }) {
 
   const hideSections =
     location.pathname === "/resume" || location.pathname === "/github";
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [open]);
 
   // Highlight only real routes
   const isRouteActive = (path) =>
@@ -32,13 +42,20 @@ export default function Navbar({ activeSection }) {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* LOGO */}
-          <Link to="/" className="text-2xl md:text-4xl font-dancing">
+          <Link
+            to="/"
+            aria-label="Samir Jadhav — Home"
+            className="text-2xl md:text-4xl font-dancing"
+          >
             <span className="text-white">Samir</span>{" "}
             <span className="text-accent">Jadhav</span>
           </Link>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden md:flex gap-8 items-center">
+          <nav
+            className="hidden md:flex gap-8 items-center"
+            aria-label="Primary navigation"
+          >
             <Link to="/" className={isRouteActive("/")}>
               Home
             </Link>
@@ -104,10 +121,14 @@ export default function Navbar({ activeSection }) {
           {/* MOBILE MENU BUTTON */}
           <div className="md:hidden flex items-center gap-3">
             <button
+              type="button"
               onClick={() => setOpen(!open)}
               className="glass p-2 text-white"
+              aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={open}
+              aria-controls="mobile-navigation"
             >
-              <i className="bx bx-menu text-xl"></i>
+              <i className="bx bx-menu text-xl" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -116,6 +137,9 @@ export default function Navbar({ activeSection }) {
       {/* MOBILE MENU */}
       {open && (
         <motion.div
+          id="mobile-navigation"
+          role="navigation"
+          aria-label="Mobile navigation"
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -15 }}

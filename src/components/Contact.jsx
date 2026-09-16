@@ -1,32 +1,28 @@
 import React, { useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
 import { motion } from "framer-motion";
 
 export default function Contact() {
   const formRef = useRef();
   const [status, setStatus] = useState("");
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
     setStatus("Sending...");
 
-    emailjs
-      .sendForm(
+    try {
+      const emailjs = (await import("@emailjs/browser")).default;
+      await emailjs.sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         formRef.current,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          setStatus("✅ Message sent successfully!");
-          formRef.current.reset();
-        },
-        (error) => {
-          console.error(error);
-          setStatus("❌ Error: Failed to send message.");
-        }
       );
+      setStatus("✅ Message sent successfully!");
+      formRef.current.reset();
+    } catch (error) {
+      console.error(error);
+      setStatus("❌ Error: Failed to send message.");
+    }
   };
 
   return (
@@ -61,12 +57,15 @@ export default function Contact() {
 
           <div className="mt-6 space-y-5">
             <p className="section-sub flex items-center gap-3 break-all">
-              <i className="bx bx-envelope text-2xl text-accent"></i>
+              <i
+                className="bx bx-envelope text-2xl text-accent"
+                aria-hidden="true"
+              ></i>
               samirzjadhav@gmail.com
             </p>
 
             <p className="section-sub flex items-center gap-3">
-              <i className="bx bx-map text-2xl text-accent"></i>
+              <i className="bx bx-map text-2xl text-accent" aria-hidden="true"></i>
               Nagpur, Maharashtra, India
             </p>
           </div>
@@ -75,23 +74,29 @@ export default function Contact() {
             <a
               href="https://github.com/samirzjadhav"
               target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub profile"
               className="glass p-3 rounded-lg hover:bg-white/10 transition"
             >
-              <i className="bx bxl-github text-2xl"></i>
+              <i className="bx bxl-github text-2xl" aria-hidden="true"></i>
             </a>
             <a
               href="https://linkedin.com/in/samirjadhav"
               target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn profile"
               className="glass p-3 rounded-lg hover:bg-white/10 transition"
             >
-              <i className="bx bxl-linkedin text-2xl"></i>
+              <i className="bx bxl-linkedin text-2xl" aria-hidden="true"></i>
             </a>
             <a
               href="https://twitter.com/samirzjadhav"
               target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter profile"
               className="glass p-3 rounded-lg hover:bg-white/10 transition"
             >
-              <i className="bx bxl-twitter text-2xl"></i>
+              <i className="bx bxl-twitter text-2xl" aria-hidden="true"></i>
             </a>
           </div>
         </motion.div>
@@ -108,48 +113,75 @@ export default function Contact() {
             border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
             space-y-6
           "
+          aria-label="Contact form"
         >
           {/* INPUT GROUP */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <input
-              name="from_name"
-              placeholder="Your Name"
-              required
-              className="
-                p-4 rounded-lg bg-white/5 text-white border border-white/10
-                focus:outline-none focus:border-accent/60 focus:bg-white/10 
-                transition placeholder-white/40 w-full
-              "
-            />
+            <div>
+              <label htmlFor="from_name" className="sr-only">
+                Your Name
+              </label>
+              <input
+                id="from_name"
+                name="from_name"
+                placeholder="Your Name"
+                autoComplete="name"
+                required
+                className="
+                  p-4 rounded-lg bg-white/5 text-white border border-white/10
+                  focus:border-accent/60 focus:bg-white/10 
+                  transition placeholder-white/40 w-full
+                "
+              />
+            </div>
 
-            <input
-              name="reply_to"
-              type="email"
-              placeholder="Email Address"
-              required
-              className="
-                p-4 rounded-lg bg-white/5 text-white border border-white/10
-                focus:outline-none focus:border-accent/60 focus:bg-white/10 
-                transition placeholder-white/40 w-full
-              "
-            />
+            <div>
+              <label htmlFor="reply_to" className="sr-only">
+                Email Address
+              </label>
+              <input
+                id="reply_to"
+                name="reply_to"
+                type="email"
+                placeholder="Email Address"
+                autoComplete="email"
+                required
+                className="
+                  p-4 rounded-lg bg-white/5 text-white border border-white/10
+                  focus:border-accent/60 focus:bg-white/10 
+                  transition placeholder-white/40 w-full
+                "
+              />
+            </div>
           </div>
 
-          <textarea
-            name="message"
-            rows="6"
-            placeholder="Your Message..."
-            required
-            className="
-              w-full p-4 rounded-lg bg-white/5 text-white border border-white/10
-              focus:outline-none focus:border-accent/60 focus:bg-white/10
-              transition placeholder-white/40
-            "
-          ></textarea>
+          <div>
+            <label htmlFor="message" className="sr-only">
+              Your Message
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              placeholder="Your Message..."
+              required
+              className="
+                w-full p-4 rounded-lg bg-white/5 text-white border border-white/10
+                focus:border-accent/60 focus:bg-white/10
+                transition placeholder-white/40
+              "
+            ></textarea>
+          </div>
 
           {/* STATUS MESSAGE */}
           {status && (
-            <p className="text-sm text-accent font-medium mt-1">{status}</p>
+            <p
+              className="text-sm text-accent font-medium mt-1"
+              role="status"
+              aria-live="polite"
+            >
+              {status}
+            </p>
           )}
 
           <div className="flex justify-end">

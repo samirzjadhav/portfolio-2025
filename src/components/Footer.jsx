@@ -31,14 +31,17 @@ export default function Footer() {
             {
               icon: "bxl-github",
               link: "https://github.com/samirzjadhav",
+              label: "GitHub profile",
             },
             {
               icon: "bxl-linkedin",
               link: "https://linkedin.com/in/samirjadhav",
+              label: "LinkedIn profile",
             },
             {
               icon: "bxl-twitter",
               link: "https://twitter.com/samirzjadhav",
+              label: "Twitter profile",
             },
           ].map((item) => (
             <motion.a
@@ -46,12 +49,14 @@ export default function Footer() {
               key={item.icon}
               href={item.link}
               target="_blank"
+              rel="noopener noreferrer"
+              aria-label={item.label}
               className="
                 glass p-3 rounded-xl border border-white/10 
                 hover:bg-white/10 transition shadow-lg
               "
             >
-              <i className={`bx ${item.icon} text-2xl`}></i>
+              <i className={`bx ${item.icon} text-2xl`} aria-hidden="true"></i>
             </motion.a>
           ))}
         </div>

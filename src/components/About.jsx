@@ -16,7 +16,9 @@ export default function About() {
         <div className="glass-strong p-6 feature-layer">
           <img
             src={profile}
-            alt="profile"
+            alt="Portrait photo of Samir Jadhav"
+            loading="lazy"
+            decoding="async"
             className="rounded-xl w-full object-cover"
           />
         </div>
@@ -50,17 +52,32 @@ export default function About() {
           </p>
 
           <div className="mt-6 flex gap-3">
-            <a href="https://github.com/samirzjadhav" className="glass p-3">
-              <i className="bx bxl-github"></i>
+            <a
+              href="https://github.com/samirzjadhav"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub profile"
+              className="glass p-3"
+            >
+              <i className="bx bxl-github" aria-hidden="true"></i>
             </a>
             <a
               href="https://www.linkedin.com/in/samirzjadhav"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn profile"
               className="glass p-3"
             >
-              <i className="bx bxl-linkedin"></i>
+              <i className="bx bxl-linkedin" aria-hidden="true"></i>
             </a>
-            <a href="https://twitter.com/samirzjadhav" className="glass p-3">
-              <i className="bx bxl-twitter"></i>
+            <a
+              href="https://twitter.com/samirzjadhav"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter profile"
+              className="glass p-3"
+            >
+              <i className="bx bxl-twitter" aria-hidden="true"></i>
             </a>
           </div>
         </div>
