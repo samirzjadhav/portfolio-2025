@@ -2,8 +2,8 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { motion } from "framer-motion";
 import { contactFormConfig, contactInfo, socialLinks } from "../data/contact";
-import { sendContactEmail } from "../services";
-import type { ContactFormField } from "../types";
+import { sendMessage } from "../services/messageService";
+import type { ContactFormField, ContactFormStatus } from "../types";
 
 const inputClassName = `
   p-4 rounded-lg bg-white/5 text-white border border-white/10
@@ -20,11 +20,11 @@ function renderFormField(field: ContactFormField) {
         rows={field.rows}
         placeholder={field.placeholder}
         required={field.required}
-        className={`
+        className="
           w-full p-4 rounded-lg bg-white/5 text-white border border-white/10
           focus:border-accent/60 focus:bg-white/10
           transition placeholder-white/40
-        `}
+        "
       ></textarea>
     );
   }
@@ -42,24 +42,49 @@ function renderFormField(field: ContactFormField) {
   );
 }
 
-export default function Contact() {
-  const [status, setStatus] = useState("");
+function getStatusMessage(status: ContactFormStatus): string {
+  switch (status.type) {
+    case "loading":
+      return "Sending...";
+    case "success":
+      return status.message;
+    case "error":
+      return status.message;
+    default:
+      return "";
+  }
+}
 
-  const sendEmail = async (e: FormEvent<HTMLFormElement>) => {
+export default function Contact() {
+  const [status, setStatus] = useState<ContactFormStatus>({ type: "idle" });
+  const isSubmitting = status.type === "loading";
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus("Sending...");
+    setStatus({ type: "loading" });
 
     const form = e.currentTarget;
 
     try {
-      await sendContactEmail(form);
-      setStatus("✅ Message sent successfully!");
+      await sendMessage(form);
+      setStatus({
+        type: "success",
+        message: "✅ Message sent successfully!",
+      });
       form.reset();
     } catch (error) {
       console.error(error);
-      setStatus("❌ Error: Failed to send message.");
+      setStatus({
+        type: "error",
+        message:
+          error instanceof Error
+            ? `❌ Error: ${error.message}`
+            : "❌ Error: Failed to send message.",
+      });
     }
   };
+
+  const statusMessage = getStatusMessage(status);
 
   return (
     <motion.section
@@ -121,7 +146,7 @@ export default function Contact() {
         </motion.div>
 
         <motion.form
-          onSubmit={sendEmail}
+          onSubmit={handleSubmit}
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
@@ -153,24 +178,27 @@ export default function Contact() {
             {renderFormField(contactFormConfig.messageField)}
           </div>
 
-          {status && (
+          {statusMessage && (
             <p
-              className="text-sm text-accent font-medium mt-1"
+              className={`text-sm font-medium mt-1 ${
+                status.type === "error" ? "text-red-300" : "text-accent"
+              }`}
               role="status"
               aria-live="polite"
             >
-              {status}
+              {statusMessage}
             </p>
           )}
 
           <div className="flex justify-end">
             <motion.button
-              whileTap={{ scale: 0.92 }}
-              whileHover={{ scale: 1.08 }}
-              className="btn-accent text-sm sm:text-base px-6 py-3 rounded-lg shadow-md shadow-accent/20"
+              whileTap={{ scale: isSubmitting ? 1 : 0.92 }}
+              whileHover={{ scale: isSubmitting ? 1 : 1.08 }}
+              className="btn-accent text-sm sm:text-base px-6 py-3 rounded-lg shadow-md shadow-accent/20 disabled:opacity-60 disabled:cursor-not-allowed"
               type="submit"
+              disabled={isSubmitting}
             >
-              Send Message
+              {isSubmitting ? "Sending..." : "Send Message"}
             </motion.button>
           </div>
         </motion.form>
