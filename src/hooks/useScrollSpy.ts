@@ -1,10 +1,17 @@
 import { useEffect, useRef, useState } from "react";
+import type { SectionId } from "../types";
 
-const SECTIONS = ["home", "about", "skills", "portfolio", "contact"];
+const SECTIONS: SectionId[] = [
+  "home",
+  "about",
+  "skills",
+  "portfolio",
+  "contact",
+];
 const ACTIVATION_RATIO = 0.3;
 
-function resolveActiveSection() {
-  let current = SECTIONS[0];
+function resolveActiveSection(): SectionId {
+  let current: SectionId = SECTIONS[0];
   const threshold = window.innerHeight * ACTIVATION_RATIO;
 
   for (const sectionId of SECTIONS) {
@@ -19,10 +26,10 @@ function resolveActiveSection() {
   return current;
 }
 
-export function useScrollSpy() {
-  const [activeSection, setActiveSection] = useState(SECTIONS[0]);
-  const activeSectionRef = useRef(SECTIONS[0]);
-  const frameRef = useRef(0);
+export function useScrollSpy(): SectionId {
+  const [activeSection, setActiveSection] = useState<SectionId>(SECTIONS[0]);
+  const activeSectionRef = useRef<SectionId>(SECTIONS[0]);
+  const frameRef = useRef<number>(0);
 
   useEffect(() => {
     const updateActiveSection = () => {

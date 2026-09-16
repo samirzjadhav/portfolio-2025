@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchGitHubDashboard } from "../api/github";
+import { fetchGitHubDashboard } from "../services";
+import type { GitHubDataState, UseGitHubDataResult } from "../types";
 
-const initialState = {
+const initialState: GitHubDataState = {
   status: "loading",
   profile: null,
   repos: [],
   error: null,
 };
 
-export function useGitHubData() {
+export function useGitHubData(): UseGitHubDataResult {
   const [retryKey, setRetryKey] = useState(0);
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState<GitHubDataState>(initialState);
 
   const retry = useCallback(() => {
     setState(initialState);

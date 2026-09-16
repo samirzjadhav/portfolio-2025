@@ -6,9 +6,16 @@ import {
   TWITTER_HANDLE,
   getCanonicalUrl,
 } from "../config/site";
+import type { PageMeta } from "../types";
 
-function upsertMeta(attribute, key, content) {
-  let element = document.querySelector(`meta[${attribute}="${key}"]`);
+function upsertMeta(
+  attribute: "name" | "property",
+  key: string,
+  content: string
+): void {
+  let element = document.querySelector<HTMLMetaElement>(
+    `meta[${attribute}="${key}"]`
+  );
 
   if (!element) {
     element = document.createElement("meta");
@@ -19,8 +26,8 @@ function upsertMeta(attribute, key, content) {
   element.setAttribute("content", content);
 }
 
-function upsertLink(rel, href) {
-  let element = document.querySelector(`link[rel="${rel}"]`);
+function upsertLink(rel: string, href: string): void {
+  let element = document.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
 
   if (!element) {
     element = document.createElement("link");
@@ -36,7 +43,7 @@ export function usePageMeta({
   description,
   path = "/",
   image = DEFAULT_OG_IMAGE,
-}) {
+}: PageMeta): void {
   useEffect(() => {
     const canonicalUrl = getCanonicalUrl(path);
 
