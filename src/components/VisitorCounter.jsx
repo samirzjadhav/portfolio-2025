@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+
+function readVisitCount() {
+  const stored = localStorage.getItem("visit-count");
+  const total = stored ? parseInt(stored, 10) + 1 : 1;
+  localStorage.setItem("visit-count", String(total));
+  return total;
+}
 
 export default function VisitorCounter() {
-  const [visits, setVisits] = useState(0);
-
-  useEffect(() => {
-    Promise.resolve().then(() => {
-      let total = localStorage.getItem("visit-count");
-
-      if (!total) {
-        total = 1;
-      } else {
-        total = parseInt(total) + 1;
-      }
-
-      localStorage.setItem("visit-count", total);
-      setVisits(total);
-    });
-  }, []);
+  const [visits] = useState(readVisitCount);
 
   return (
     <div

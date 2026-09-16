@@ -1,26 +1,26 @@
-import { StrictMode } from "react";
+import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
+import { MotionConfig } from "framer-motion";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
-import GitHub from "./pages/Github.jsx";
-import ResumePage from "./pages/Resume.jsx";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Loader from "./components/Loader.jsx";
 
-/* Boxicons CDN (used in original) - you can also add this to public/index.html */
-const boxicons = document.createElement("link");
-boxicons.rel = "stylesheet";
-boxicons.href =
-  "https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css";
-document.head.appendChild(boxicons);
+const GitHub = lazy(() => import("./pages/Github.jsx"));
+const ResumePage = lazy(() => import("./pages/Resume.jsx"));
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/github" element={<GitHub />} />
-        <Route path="/resume" element={<ResumePage />} />
-      </Routes>
-    </BrowserRouter>
+    <MotionConfig reducedMotion="user">
+      <BrowserRouter>
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/github" element={<GitHub />} />
+            <Route path="/resume" element={<ResumePage />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </MotionConfig>
   </StrictMode>
 );
