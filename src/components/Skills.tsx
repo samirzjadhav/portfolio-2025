@@ -5,20 +5,20 @@ import {
   workflowCategories,
 } from "../data/skills";
 import type { SkillCategory } from "../types";
+import { Reveal, SectionIntro, StaggerContainer, useMotionVariants } from "../motion";
 
 interface SkillChipProps {
   label: string;
 }
 
 function SkillChip({ label }: SkillChipProps) {
+  const { hover, scrollReveal } = useMotionVariants();
+
   return (
     <motion.span
-      whileHover={{ scale: 1.08 }}
-      className="
-        px-4 py-2 rounded-full text-sm
-        bg-white/5 border border-white/10 backdrop-blur-md
-        text-white/80 shadow-[0_4px_10px_rgba(0,0,0,0.2)]
-      "
+      variants={scrollReveal({ distance: 14, scale: 0.92, blur: 4, duration: 0.45 })}
+      whileHover={hover.chip(1.08)}
+      className="surface-chip"
     >
       {label}
     </motion.span>
@@ -30,16 +30,32 @@ interface SkillCategoryGroupProps {
 }
 
 function SkillCategoryGroup({ categories }: SkillCategoryGroupProps) {
+  const { scrollStagger, scrollReveal, itemViewport } = useMotionVariants();
+
   return (
     <div className="space-y-8">
       {categories.map(({ title, items }) => (
         <div key={title}>
-          <h5 className="text-accent font-bold text-lg">{title}</h5>
-          <div className="mt-3 flex flex-wrap gap-3">
+          <Reveal
+            as="h5"
+            variants={scrollReveal({ distance: 18, blur: 4 })}
+            viewport={itemViewport}
+            className="text-accent font-bold text-lg"
+          >
+            {title}
+          </Reveal>
+
+          <StaggerContainer
+            className="mt-3 flex flex-wrap gap-3"
+            viewport={itemViewport}
+            staggerAmount={0.04}
+            delayChildren={0.06}
+            variants={scrollStagger(0.04, 0.06)}
+          >
             {items.map((item) => (
               <SkillChip key={item} label={item} />
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       ))}
     </div>
@@ -47,56 +63,67 @@ function SkillCategoryGroup({ categories }: SkillCategoryGroupProps) {
 }
 
 export default function Skills() {
+  const motionVariants = useMotionVariants();
+
   return (
-    <motion.section
-      id="skills"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.7 }}
-      className="py-16 mt-12"
-    >
-      <div className="relative inline-block">
-        <h3 className="section-title">Skills</h3>
-      </div>
-      <p className="section-sub mt-2 text-white/70">
-        Technologies & tools I use to build high-quality web experiences.
-      </p>
+    <section id="skills" className="section-block">
+      <SectionIntro
+        title="Skills"
+        subtitle="Technologies & tools I use to build high-quality web experiences."
+      />
 
-      <div className="mt-12 grid md:grid-cols-2 gap-10">
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
-          className="
-            p-8 rounded-2xl glass backdrop-blur-2xl 
-            border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
-          "
+      <div className="section-content grid md:grid-cols-2 gap-10">
+        <Reveal
+          variants={motionVariants.scrollRevealLeft(40)}
+          viewport={motionVariants.sectionViewport}
+          className="cursor-hover-target p-5 md:p-8 glass surface-card"
         >
-          <h4 className="text-accent font-bold text-xl">Tech Stack</h4>
+          <Reveal
+            as="h4"
+            variants={motionVariants.scrollHeading()}
+            viewport={motionVariants.headingViewport}
+            className="text-accent font-bold text-xl"
+          >
+            Tech Stack
+          </Reveal>
           <SkillCategoryGroup categories={stackCategories} />
-        </motion.div>
+        </Reveal>
 
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
-          className="
-            p-8 rounded-2xl glass backdrop-blur-2xl
-            border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]
-          "
+        <Reveal
+          variants={motionVariants.scrollRevealRight(40)}
+          viewport={motionVariants.sectionViewport}
+          className="cursor-hover-target p-5 md:p-8 glass surface-card"
         >
-          <h4 className="text-accent font-bold text-xl">Workflow</h4>
+          <Reveal
+            as="h4"
+            variants={motionVariants.scrollHeading()}
+            viewport={motionVariants.headingViewport}
+            className="text-accent font-bold text-xl"
+          >
+            Workflow
+          </Reveal>
           <SkillCategoryGroup categories={workflowCategories} />
 
           <div className="mt-8">
-            <h4 className="text-accent font-bold text-lg">Other Skills</h4>
-            <p className="section-sub mt-2 leading-relaxed text-white/70">
+            <Reveal
+              as="h4"
+              variants={motionVariants.scrollReveal({ distance: 20, blur: 4 })}
+              viewport={motionVariants.itemViewport}
+              className="text-accent font-bold text-lg"
+            >
+              Other Skills
+            </Reveal>
+            <Reveal
+              as="p"
+              variants={motionVariants.scrollSubheading()}
+              viewport={motionVariants.paragraphViewport}
+              className="section-sub mt-2 leading-relaxed text-white/70"
+            >
               {skillsData.otherSkillsDescription}
-            </p>
+            </Reveal>
           </div>
-        </motion.div>
+        </Reveal>
       </div>
-    </motion.section>
+    </section>
   );
 }

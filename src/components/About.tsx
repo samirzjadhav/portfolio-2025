@@ -1,19 +1,20 @@
-import profile from "../assets/Projects/profile.jpg";
 import { motion } from "framer-motion";
-import { contactInfo, socialLinks } from "../data/contact";
+import profile from "../assets/Projects/profile.jpg";
+import { socialLinks } from "../data/contact";
+import { ABOUT_SUMMARY } from "../data/heroContent";
+import { Reveal, SectionIntro, StaggerContainer, useMotionVariants } from "../motion";
 
 export default function About() {
+  const motionVariants = useMotionVariants();
+
   return (
-    <motion.section
-      id="about"
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className="mt-12 py-10"
-    >
+    <section id="about" className="section-block">
       <div className="grid md:grid-cols-2 gap-8 items-center">
-        <div className="glass-strong p-6 feature-layer">
+        <Reveal
+          variants={motionVariants.scrollRevealLeft(48)}
+          viewport={motionVariants.sectionViewport}
+          className="cursor-hover-target glass-strong p-6 feature-layer"
+        >
           <img
             src={profile}
             alt="Portrait photo of Samir Jadhav"
@@ -21,52 +22,47 @@ export default function About() {
             decoding="async"
             className="rounded-xl w-full object-cover"
           />
-        </div>
+        </Reveal>
 
         <div>
-          <h3 className="section-title">About</h3>
+          <SectionIntro
+            title="About"
+            subtitle="A quick background beyond the headline."
+          />
 
-          <p className="section-sub mt-4">
-            Hi there, I'm{" "}
-            <span className="text-accent font-semibold">{contactInfo.name}</span>{" "}
-            — a passionate Frontend Engineer who loves building modern, clean,
-            and user-friendly web experiences. My journey into web development
-            began with curiosity, and over time it evolved into something I
-            truly enjoy and take pride in.
-          </p>
+          <Reveal
+            as="p"
+            variants={motionVariants.scrollReveal({ distance: 24, blur: 6 })}
+            viewport={motionVariants.paragraphViewport}
+            className="section-sub mt-4 leading-relaxed"
+          >
+            {ABOUT_SUMMARY}
+          </Reveal>
 
-          <p className="section-sub mt-4">
-            I've worked on everything from UI components to fully responsive
-            websites and complete React applications. What motivates me is the
-            process of turning a blank screen into something meaningful,
-            interactive, and visually appealing. I love creating smooth
-            interfaces, reusable components, and performance-optimized designs.
-          </p>
-
-          <p className="section-sub mt-4">
-            Outside of coding, I spend time learning new technologies, reading
-            dev blogs, exploring animations, and studying scalable front-end
-            patterns. I'm excited to continue growing as a developer and
-            contribute to impactful, real-world projects while helping brands
-            and creators build great digital experiences.
-          </p>
-
-          <div className="mt-6 flex gap-3">
+          <StaggerContainer
+            className="mt-6 flex gap-3"
+            viewport={motionVariants.itemViewport}
+            staggerAmount={0.08}
+            delayChildren={0.04}
+            variants={motionVariants.scrollStagger(0.08, 0.04)}
+          >
             {socialLinks.map((link) => (
-              <a
+              <motion.a
                 key={link.platform}
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.label}
+                variants={motionVariants.scrollReveal({ distance: 16, scale: 0.9, blur: 4 })}
+                whileHover={motionVariants.hover.icon(1.1, 6)}
                 className="glass p-3"
               >
-                <i className={`bx ${link.icon}`} aria-hidden="true"></i>
-              </a>
+                <i className={`bx ${link.icon}`} aria-hidden="true" />
+              </motion.a>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }
