@@ -114,7 +114,7 @@ export default function GitHub() {
               <SectionDivider />
 
               <GitHubAnimatedSection ariaLabel="Repository metrics">
-                <GitHubStaggerGrid className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
+                <GitHubStaggerGrid className="grid grid-cols-1 min-[420px]:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
                   <GitHubStatCard
                     label="Total stars"
                     value={stats.totalStars}
@@ -150,7 +150,7 @@ export default function GitHub() {
                   title="Contribution Activity"
                   subtitle="Public GitHub activity over the past year"
                 />
-                <div className="glass surface-card p-4 sm:p-5 md:p-6 w-full overflow-hidden">
+                <div className="glass surface-card p-4 sm:p-5 md:p-6 w-full min-w-0">
                   <div className="contribution-graph-wrapper contribution-panel rounded-xl p-4 sm:p-5 md:p-6">
                     {isContributionsLoading && (
                       <GitHubContributionHeatmapSkeleton />
