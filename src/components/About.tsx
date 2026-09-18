@@ -15,13 +15,15 @@ export default function About() {
           viewport={motionVariants.sectionViewport}
           className="cursor-hover-target glass-strong p-6 feature-layer"
         >
-          <img
-            src={profile}
-            alt="Portrait photo of Samir Jadhav"
-            loading="lazy"
-            decoding="async"
-            className="rounded-xl w-full object-cover"
-          />
+          <div className="overflow-hidden rounded-xl aspect-[4/5]">
+            <img
+              src={profile}
+              alt="Portrait photo of Samir Jadhav"
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover object-[center_38%]"
+            />
+          </div>
         </Reveal>
 
         <div>
