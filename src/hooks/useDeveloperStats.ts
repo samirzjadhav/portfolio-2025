@@ -61,7 +61,7 @@ export function useDeveloperStats(): DeveloperStat[] {
       id: "portfolio-projects",
       label: "Portfolio Projects",
       icon: "bx-folder-open",
-      source: "Portfolio API · /api/projects",
+      source: "Portfolio · featured projects",
       status: isProjectsLoading
         ? "loading"
         : isProjectsError
