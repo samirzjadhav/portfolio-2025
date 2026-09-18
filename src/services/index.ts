@@ -5,6 +5,11 @@ export {
   getContributionChartUrl,
 } from "./githubService";
 export { apiRequest, ApiError } from "./apiClient";
-export { fetchProjects, fetchProjectBySlug } from "./projectService";
+export {
+  getProjects,
+  getProjectBySlug,
+  fetchProjects,
+  fetchProjectBySlug,
+} from "./projectService";
 export { sendMessage } from "./messageService";
 export { incrementVisitCount } from "./visitorService";

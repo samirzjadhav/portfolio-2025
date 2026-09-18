@@ -14,10 +14,22 @@ export class ApiError extends Error {
 }
 
 async function parseJsonResponse(response: Response): Promise<unknown> {
+  const contentType = response.headers.get("content-type") ?? "";
+
+  if (!contentType.includes("application/json")) {
+    throw new ApiError(
+      "Backend unavailable — check VITE_API_URL points to your deployed API.",
+      response.status
+    );
+  }
+
   try {
     return await response.json();
   } catch {
-    throw new ApiError("Invalid response from server", response.status);
+    throw new ApiError(
+      "Backend returned invalid JSON — verify the API is running.",
+      response.status
+    );
   }
 }
 
