@@ -19,17 +19,12 @@ export default function VisitorCounter() {
   }, []);
 
   return (
-    <div
-      className="
-        fixed bottom-5 right-5
-        glass px-4 py-2 rounded-lg
-        text-white text-sm
-        border border-white/10
-        backdrop-blur-xl z-50
-      "
-    >
-      👁️ Total Visits:{" "}
-      <span className="text-accent font-semibold">
+    <div className="visitor-counter" aria-live="polite">
+      <span className="visitor-counter-icon" aria-hidden="true">
+        👁️
+      </span>
+      <span className="visitor-counter-label">Total Visits:</span>{" "}
+      <span className="visitor-counter-value">
         {visits === null ? "…" : visits.toLocaleString()}
       </span>
     </div>
