@@ -149,7 +149,7 @@ export default function GitHubContributionHeatmap({
         </div>
       </div>
 
-      <div className="w-full min-w-0 overflow-hidden">
+      <div className="contribution-heatmap-scroll w-full min-w-0">
         <div
           className="relative mb-2.5 h-4 text-[11px] font-medium text-white/50"
           style={{ marginLeft: LABEL_WIDTH }}
