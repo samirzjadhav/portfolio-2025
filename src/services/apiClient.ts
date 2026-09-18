@@ -18,7 +18,7 @@ async function parseJsonResponse(response: Response): Promise<unknown> {
 
   if (!contentType.includes("application/json")) {
     throw new ApiError(
-      "Unable to reach the contact service. Please try again or email me directly.",
+      "The server returned an unexpected response. Please try again.",
       response.status
     );
   }
@@ -27,7 +27,7 @@ async function parseJsonResponse(response: Response): Promise<unknown> {
     return await response.json();
   } catch {
     throw new ApiError(
-      "Something went wrong while sending your message. Please try again.",
+      "The server returned an invalid response. Please try again.",
       response.status
     );
   }

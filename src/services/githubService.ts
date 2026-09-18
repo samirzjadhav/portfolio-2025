@@ -8,7 +8,6 @@ import type {
   GitHubProfile,
   GitHubRepo,
 } from "../types";
-import { apiRequest, ApiError } from "./apiClient";
 
 export const GITHUB_USERNAME = "samirzjadhav";
 
@@ -19,46 +18,6 @@ const CACHE_KEY = "github-dashboard-cache";
 const CONTRIBUTIONS_CACHE_KEY = "github-contributions-cache";
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
-const CONTRIBUTIONS_QUERY = `
-  query($username: String!) {
-    user(login: $username) {
-      contributionsCollection {
-        contributionCalendar {
-          totalContributions
-          weeks {
-            contributionDays {
-              contributionCount
-              contributionLevel
-              date
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-interface GraphQLContributionDay {
-  date: string;
-  contributionCount: number;
-  contributionLevel: GitHubContributionLevel;
-}
-
-interface GraphQLContributionsResponse {
-  data?: {
-    user?: {
-      contributionsCollection?: {
-        contributionCalendar?: {
-          totalContributions: number;
-          weeks: Array<{ contributionDays: GraphQLContributionDay[] }>;
-        };
-      };
-    } | null;
-  };
-  errors?: Array<{ message: string }>;
-  message?: string;
-}
-
 interface ContributionsCacheEntry {
   expiresAt: number;
   data: GitHubContributionCalendar;
@@ -67,6 +26,25 @@ interface ContributionsCacheEntry {
 interface GitHubErrorResponse {
   message?: string;
 }
+
+interface PublicContributionEntry {
+  date: string;
+  count: number;
+  level: number;
+}
+
+interface PublicContributionsResponse {
+  total: { lastYear: number };
+  contributions: PublicContributionEntry[];
+}
+
+const CONTRIBUTION_LEVELS: GitHubContributionLevel[] = [
+  "NONE",
+  "FIRST_QUARTILE",
+  "SECOND_QUARTILE",
+  "THIRD_QUARTILE",
+  "FOURTH_QUARTILE",
+];
 
 async function fetchGitHubJson<T>(url: string): Promise<T> {
   const response = await fetch(url);
@@ -157,57 +135,41 @@ function writeCachedContributions(data: GitHubContributionCalendar): void {
   sessionStorage.setItem(CONTRIBUTIONS_CACHE_KEY, JSON.stringify(entry));
 }
 
-function normalizeContributionDay(
-  day: GraphQLContributionDay
-): GitHubContributionDay {
-  return {
-    date: day.date,
-    contributionCount: day.contributionCount,
-    contributionLevel: day.contributionLevel,
-  };
-}
-
-async function fetchContributionCalendarFromGraphQL(
+async function fetchContributionCalendarFromPublicApi(
   username: string
 ): Promise<GitHubContributionCalendar> {
-  const response = await fetch("https://api.github.com/graphql", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: CONTRIBUTIONS_QUERY,
-      variables: { username },
-    }),
-  });
-
-  const body = (await response.json()) as GraphQLContributionsResponse;
+  const response = await fetch(
+    `https://github-contributions-api.jogruber.de/v4/${username}?y=last`
+  );
 
   if (!response.ok) {
     throw new Error(
-      body.message ??
-        `GitHub GraphQL request failed (${response.status})`
+      `Contribution data request failed (${response.status}). Please try again.`
     );
   }
 
-  if (body.errors?.length) {
-    throw new Error(body.errors[0]?.message ?? "GitHub GraphQL error");
+  const body = (await response.json()) as PublicContributionsResponse;
+
+  if (!Array.isArray(body.contributions)) {
+    throw new Error("Contribution data was invalid or incomplete.");
   }
 
-  const calendar =
-    body.data?.user?.contributionsCollection?.contributionCalendar;
+  const days: GitHubContributionDay[] = body.contributions.map((entry) => ({
+    date: entry.date,
+    contributionCount: entry.count,
+    contributionLevel:
+      CONTRIBUTION_LEVELS[entry.level] ?? "NONE",
+  }));
 
-  if (!calendar || !Array.isArray(calendar.weeks)) {
-    throw new Error(`GitHub user "${username}" was not found.`);
+  const weeks = [];
+  for (let index = 0; index < days.length; index += 7) {
+    weeks.push({ contributionDays: days.slice(index, index + 7) });
   }
 
   return {
     username,
-    totalContributions: calendar.totalContributions,
-    weeks: calendar.weeks.map((week) => ({
-      contributionDays: week.contributionDays.map(normalizeContributionDay),
-    })),
+    totalContributions: body.total.lastYear,
+    weeks,
   };
 }
 
@@ -219,21 +181,7 @@ export async function fetchContributionCalendar({
     if (cached) return cached;
   }
 
-  try {
-    const data = await apiRequest<GitHubContributionCalendar>(
-      bypassCache
-        ? "/api/github/contributions?refresh=true"
-        : "/api/github/contributions"
-    );
-    writeCachedContributions(data);
-    return data;
-  } catch (error) {
-    if (error instanceof ApiError) {
-      throw error;
-    }
-
-    const data = await fetchContributionCalendarFromGraphQL(GITHUB_USERNAME);
-    writeCachedContributions(data);
-    return data;
-  }
+  const data = await fetchContributionCalendarFromPublicApi(GITHUB_USERNAME);
+  writeCachedContributions(data);
+  return data;
 }
