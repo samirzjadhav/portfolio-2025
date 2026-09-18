@@ -115,7 +115,7 @@ export default function Footer() {
         <span className="footer-glow-orb footer-glow-orb-b" />
       </div>
 
-      <div className="site-footer-inner max-w-6xl mx-auto px-6">
+      <div className="site-footer-inner max-w-6xl mx-auto px-4 sm:px-6">
         <motion.div
           className="footer-shell surface-shell"
           initial="hidden"
