@@ -62,7 +62,7 @@ function Hero() {
     <section
       ref={sectionRef}
       id="home"
-      className="hero-section relative isolate min-h-[100dvh] min-h-[100svh] md:min-h-[90vh] flex items-start md:items-center overflow-x-hidden py-10 sm:py-12 md:py-16"
+      className="hero-section relative isolate min-h-0 md:min-h-[90vh] flex items-start md:items-center overflow-x-hidden py-8 sm:py-12 md:py-16 pb-12 sm:pb-14 md:pb-16"
     >
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
@@ -146,12 +146,12 @@ function Hero() {
           <HeroHighlights reduceMotion={reduceMotion ?? false} />
 
           <motion.div
-            className="flex flex-col sm:flex-row flex-wrap gap-3 pt-1 items-stretch sm:items-center"
+            className="hero-cta-row flex flex-col sm:flex-row flex-wrap gap-3 pt-1 items-stretch sm:items-center"
             initial="hidden"
             animate="visible"
             variants={heroMotion.ctaContainer}
           >
-            <motion.div variants={heroMotion.ctaItem}>
+            <motion.div variants={heroMotion.ctaItem} className="hero-cta-item">
               <MagneticButton
                 as={Link}
                 to="/projects"
@@ -161,7 +161,7 @@ function Hero() {
               </MagneticButton>
             </motion.div>
 
-            <motion.div variants={heroMotion.ctaItem}>
+            <motion.div variants={heroMotion.ctaItem} className="hero-cta-item">
               <MagneticButton
                 as="a"
                 href="#contact"
@@ -172,7 +172,7 @@ function Hero() {
               </MagneticButton>
             </motion.div>
 
-            <motion.div variants={heroMotion.ctaItem}>
+            <motion.div variants={heroMotion.ctaItem} className="hero-cta-item">
               <MagneticButton
                 as="a"
                 href={RESUME_PDF_URL}
@@ -216,7 +216,7 @@ function Hero() {
 
       <motion.button
         type="button"
-        className="hero-scroll-cue absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
+        className="hero-scroll-cue hidden md:flex absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
         initial="hidden"
         animate="visible"
         variants={heroMotion.scrollCue}
