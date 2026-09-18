@@ -18,14 +18,10 @@ export default function VisitorCounter() {
     };
   }, []);
 
-  if (visits === null) {
-    return null;
-  }
-
   return (
     <div
       className="
-        hidden md:block fixed bottom-5 right-5
+        fixed bottom-5 right-5
         glass px-4 py-2 rounded-lg
         text-white text-sm
         border border-white/10
@@ -34,7 +30,7 @@ export default function VisitorCounter() {
     >
       👁️ Total Visits:{" "}
       <span className="text-accent font-semibold">
-        {visits.toLocaleString()}
+        {visits === null ? "…" : visits.toLocaleString()}
       </span>
     </div>
   );
