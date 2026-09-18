@@ -34,62 +34,66 @@ function FeaturedProject({ project }: FeaturedProjectProps) {
           animate="animate"
           exit="exit"
           variants={motionVariants.projectDetailTransition()}
-          className="section-content grid md:grid-cols-2 gap-10 items-center"
+          className="section-content grid md:grid-cols-2 gap-6 md:gap-10 items-center"
         >
           <ProjectInteractiveFrame
             isActive
             maxTilt={5}
             innerClassName="project-featured-panel"
           >
-            <div className="project-card-media project-featured-media">
-              <motion.img
-                key={project.id}
-                src={project.img}
-                alt={`${project.title} project screenshot`}
-                loading="lazy"
-                decoding="async"
-                draggable={false}
-                initial={{ scale: 1.04, opacity: 0.85 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={
-                  motionVariants.reduceMotion ? undefined : { scale: 1.04 }
-                }
-                className="project-card-image project-featured-image"
-              />
-              <div className="project-card-overlay project-featured-overlay" />
-            </div>
+            <div className="project-featured-layout">
+              <div className="project-card-media project-featured-media">
+                <motion.img
+                  key={project.id}
+                  src={project.img}
+                  alt={`${project.title} project screenshot`}
+                  loading="lazy"
+                  decoding="async"
+                  draggable={false}
+                  initial={{ scale: 1.04, opacity: 0.85 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={
+                    motionVariants.reduceMotion ? undefined : { scale: 1.04 }
+                  }
+                  className="project-card-image project-featured-image"
+                />
+                <div
+                  className="project-card-overlay project-featured-overlay"
+                  aria-hidden="true"
+                />
+              </div>
 
-            <StaggerContainer
-              className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 z-10"
-              animateOnMount
-              staggerAmount={0.08}
-              delayChildren={0.06}
-              variants={motionVariants.scrollStagger(0.08, 0.06)}
-            >
+              <StaggerContainer
+                className="project-featured-copy"
+                animateOnMount
+                staggerAmount={0.08}
+                delayChildren={0.06}
+                variants={motionVariants.scrollStagger(0.08, 0.06)}
+              >
               <motion.p
                 variants={motionVariants.scrollReveal({ distance: 16, blur: 4 })}
-                className="text-accent text-sm font-semibold tracking-wide"
+                className="project-featured-eyebrow"
               >
                 {project.shortDesc}
               </motion.p>
 
               <motion.h4
                 variants={motionVariants.scrollReveal({ distance: 20, blur: 4 })}
-                className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide mt-1"
+                className="project-featured-title"
               >
                 {project.title}
               </motion.h4>
 
               <motion.p
                 variants={motionVariants.scrollSubheading()}
-                className="text-white/75 text-sm mt-2 max-w-lg leading-relaxed"
+                className="project-featured-desc"
               >
                 {project.description}
               </motion.p>
 
               <StaggerContainer
-                className="mt-4 flex flex-wrap gap-2"
+                className="project-featured-tags"
                 animateOnMount
                 staggerAmount={0.05}
                 delayChildren={0.04}
@@ -106,12 +110,16 @@ function FeaturedProject({ project }: FeaturedProjectProps) {
 
               <motion.div
                 variants={motionVariants.scrollReveal({ distance: 18 })}
-                className="mt-4 sm:mt-5 flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3"
+                className="project-featured-actions"
               >
-                <motion.div whileHover={motionVariants.hover.lift(-2, 1.05)} whileTap={motionVariants.hover.tap()}>
+                <motion.div
+                  className="project-featured-action"
+                  whileHover={motionVariants.hover.lift(-2, 1.05)}
+                  whileTap={motionVariants.hover.tap()}
+                >
                   <Link
                     to={`/projects/${project.slug}`}
-                    className="btn-accent text-sm px-4 py-2 min-h-[40px] inline-flex items-center"
+                    className="btn-accent project-card-btn project-featured-btn-primary"
                   >
                     View case study
                   </Link>
@@ -123,7 +131,7 @@ function FeaturedProject({ project }: FeaturedProjectProps) {
                   rel="noopener noreferrer"
                   whileHover={motionVariants.hover.lift(-2, 1.05)}
                   whileTap={motionVariants.hover.tap()}
-                  className="btn-secondary glass min-h-[40px]"
+                  className="project-card-btn project-card-btn-ghost project-featured-btn-secondary"
                 >
                   Live demo
                 </motion.a>
@@ -134,18 +142,19 @@ function FeaturedProject({ project }: FeaturedProjectProps) {
                   rel="noopener noreferrer"
                   whileHover={motionVariants.hover.lift(-2, 1.03)}
                   whileTap={motionVariants.hover.tap()}
-                  className="btn-secondary glass min-h-[40px]"
+                  className="project-card-btn project-card-btn-ghost project-featured-btn-secondary"
                 >
                   GitHub
                 </motion.a>
               </motion.div>
-            </StaggerContainer>
+              </StaggerContainer>
+            </div>
           </ProjectInteractiveFrame>
 
           <Reveal
             variants={motionVariants.scrollRevealRight(36)}
             viewport={motionVariants.sectionViewport}
-            className="project-detail-panel glass p-5 md:p-7 rounded-2xl backdrop-blur-2xl"
+            className="project-detail-panel hidden md:block glass p-5 md:p-7 rounded-2xl backdrop-blur-2xl"
           >
             <motion.h4
               key={`${project.id}-what`}
