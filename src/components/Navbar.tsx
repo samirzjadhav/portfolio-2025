@@ -223,7 +223,7 @@ export default function Navbar({ activeSection }: NavbarProps) {
         open ? "navbar--menu-open" : ""
       }`.trim()}
     >
-      <div className="navbar-inner max-w-6xl mx-auto px-6">
+      <div className="navbar-inner max-w-6xl mx-auto px-4 sm:px-6">
         <div className="navbar-row">
           <motion.div
             whileHover={reduceMotion ? undefined : { scale: 1.02 }}
@@ -232,7 +232,7 @@ export default function Navbar({ activeSection }: NavbarProps) {
             <Link
               to="/"
               aria-label="Samir Jadhav — Home"
-              className="text-2xl md:text-4xl font-dancing leading-none"
+              className="text-xl sm:text-2xl md:text-4xl font-dancing leading-none"
             >
               <span className="text-white">Samir</span>{" "}
               <span className="text-accent">Jadhav</span>
