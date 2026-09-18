@@ -26,7 +26,7 @@ export default function App() {
       <Navbar activeSection={activeSection} />
       <main id="main-content" tabIndex={-1} className="pt-[70px]">
         <Hero />
-        <SectionTransition variant="hero-entry" spacing="loose" />
+        <SectionTransition variant="hero-entry" spacing="default" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <HomeProjects />
           <SectionTransition variant="glow-bridge" />
