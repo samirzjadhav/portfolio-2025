@@ -7,7 +7,7 @@ export default function VisitorCounter() {
   return (
     <div
       className="
-        fixed bottom-5 right-5
+        hidden md:block fixed bottom-5 right-5
         glass px-4 py-2 rounded-lg
         text-white text-sm
         border border-white/10

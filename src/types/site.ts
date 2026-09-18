@@ -5,7 +5,17 @@ export interface PageMeta {
   image?: string;
 }
 
-export type SectionId = "home" | "about" | "skills" | "portfolio" | "contact";
+export type SectionId =
+  | "home"
+  | "about"
+  | "skills"
+  | "building"
+  | "experience"
+  | "stats"
+  | "achievements"
+  | "education"
+  | "portfolio"
+  | "contact";
 
 export interface NavAnchorLink {
   name: string;

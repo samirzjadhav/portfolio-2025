@@ -7,12 +7,18 @@ export const THEME_COLOR = "#12061a";
 export const TWITTER_HANDLE = "@samirzjadhav";
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
-export const PAGE_META: Record<"home" | "github" | "resume", PageMeta> = {
+export const PAGE_META: Record<"home" | "projects" | "github" | "resume", PageMeta> = {
   home: {
     title: "Samir Jadhav — Frontend Engineer",
     description:
       "Frontend engineer portfolio showcasing React, Next.js, and Tailwind projects. Explore featured work, skills, GitHub activity, and contact details.",
     path: "/",
+  },
+  projects: {
+    title: "Projects — Samir Jadhav",
+    description:
+      "Explore Samir Jadhav's featured frontend projects, case studies, live demos, and source code.",
+    path: "/projects",
   },
   github: {
     title: "GitHub Dashboard — Samir Jadhav",

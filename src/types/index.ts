@@ -1,8 +1,14 @@
 export type { Project } from "./project";
+export type { ProjectGalleryImage } from "./gallery";
 export type {
   GitHubProfile,
   GitHubRepo,
   GitHubDashboard,
+  GitHubContributionLevel,
+  GitHubContributionDay,
+  GitHubContributionWeek,
+  GitHubContributionCalendar,
+  GitHubContributionsStatus,
   GitHubDataStatus,
   GitHubDataState,
   UseGitHubDataResult,
@@ -20,6 +26,9 @@ export type {
   SkillCategory,
   SkillsData,
 } from "./skills";
+export type { WorkExperience } from "./experience";
+export type { Achievement } from "./achievement";
+export type { EducationEntry } from "./education";
 export type {
   SocialPlatform,
   SocialLink,

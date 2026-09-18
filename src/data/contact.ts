@@ -3,7 +3,7 @@ import type { ContactFormConfig, ContactInfo, SocialLink } from "../types";
 
 export const contactInfo: ContactInfo = {
   name: "Samir Jadhav",
-  title: "Web Engineer",
+  title: "Frontend Engineer",
   email: "samirzjadhav@gmail.com",
   phone: "+91 7620647351",
   location: "Nagpur, Maharashtra, India",

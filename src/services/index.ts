@@ -1,6 +1,7 @@
 export {
   GITHUB_USERNAME,
   fetchGitHubDashboard,
+  fetchContributionCalendar,
   getContributionChartUrl,
 } from "./githubService";
 export { apiRequest, ApiError } from "./apiClient";
