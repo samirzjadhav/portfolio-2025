@@ -1,4 +1,8 @@
-export { fetchGitHubDashboard, getContributionChartUrl } from "./githubService.js";
+export {
+  fetchGitHubDashboard,
+  fetchContributionCalendar,
+  getContributionChartUrl,
+} from "./githubService.js";
 export { submitContactMessage } from "./contactService.js";
 export { getHealthStatus } from "./healthService.js";
 export { getAllProjects, getProjectBySlug } from "./projectService.js";

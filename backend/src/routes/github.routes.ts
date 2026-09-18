@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { z } from "zod";
-import { getGitHubDashboard } from "../controllers/index.js";
+import {
+  getGitHubContributions,
+  getGitHubDashboard,
+} from "../controllers/index.js";
 import { validateRequest } from "../middleware/index.js";
 
 const githubQuerySchema = z.object({
@@ -13,6 +16,12 @@ githubRouter.get(
   "/",
   validateRequest({ query: githubQuerySchema }),
   getGitHubDashboard
+);
+
+githubRouter.get(
+  "/contributions",
+  validateRequest({ query: githubQuerySchema }),
+  getGitHubContributions
 );
 
 export default githubRouter;

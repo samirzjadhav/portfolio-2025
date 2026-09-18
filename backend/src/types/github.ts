@@ -31,3 +31,26 @@ export interface GitHubContributionChart {
   username: string;
   chartUrl: string;
 }
+
+export type GitHubContributionLevel =
+  | "NONE"
+  | "FIRST_QUARTILE"
+  | "SECOND_QUARTILE"
+  | "THIRD_QUARTILE"
+  | "FOURTH_QUARTILE";
+
+export interface GitHubContributionDay {
+  date: string;
+  contributionCount: number;
+  contributionLevel: GitHubContributionLevel;
+}
+
+export interface GitHubContributionWeek {
+  contributionDays: GitHubContributionDay[];
+}
+
+export interface GitHubContributionCalendar {
+  username: string;
+  totalContributions: number;
+  weeks: GitHubContributionWeek[];
+}

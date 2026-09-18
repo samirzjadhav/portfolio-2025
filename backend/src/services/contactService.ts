@@ -16,8 +16,7 @@ export async function submitContactMessage(
   if (process.env.NODE_ENV !== "test") {
     console.info("[contact] message received", {
       id: result.id,
-      name: input.name,
-      email: input.email,
+      nameLength: input.name.length,
     });
   }
 

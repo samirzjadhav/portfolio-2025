@@ -16,4 +16,8 @@ export type {
   GitHubRepo,
   GitHubDashboard,
   GitHubContributionChart,
+  GitHubContributionLevel,
+  GitHubContributionDay,
+  GitHubContributionWeek,
+  GitHubContributionCalendar,
 } from "./github.js";

@@ -6,14 +6,18 @@ import type {
   ContactMessageResult,
 } from "../types/index.js";
 
-export const postContactMessage: RequestHandler = async (req, res) => {
-  const input = req.body as ContactMessageInput;
-  const data = await submitContactMessage(input);
+export const postContactMessage: RequestHandler = async (req, res, next) => {
+  try {
+    const input = req.body as ContactMessageInput;
+    const data = await submitContactMessage(input);
 
-  const response: ApiSuccessResponse<ContactMessageResult> = {
-    success: true,
-    data,
-  };
+    const response: ApiSuccessResponse<ContactMessageResult> = {
+      success: true,
+      data,
+    };
 
-  res.status(201).json(response);
+    res.status(201).json(response);
+  } catch (error) {
+    next(error);
+  }
 };

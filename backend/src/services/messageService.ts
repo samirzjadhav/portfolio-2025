@@ -5,6 +5,7 @@ import type {
   StoredMessage,
 } from "../types/message.js";
 
+const MAX_STORED_MESSAGES = 500;
 const messages: StoredMessage[] = [];
 
 export async function createMessage(
@@ -15,6 +16,10 @@ export async function createMessage(
     createdAt: new Date().toISOString(),
     ...input,
   };
+
+  if (messages.length >= MAX_STORED_MESSAGES) {
+    messages.shift();
+  }
 
   messages.push(storedMessage);
 
