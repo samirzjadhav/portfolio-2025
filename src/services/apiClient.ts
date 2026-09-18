@@ -18,7 +18,7 @@ async function parseJsonResponse(response: Response): Promise<unknown> {
 
   if (!contentType.includes("application/json")) {
     throw new ApiError(
-      "Backend unavailable — check VITE_API_URL points to your deployed API.",
+      "Unable to reach the contact service. Please try again or email me directly.",
       response.status
     );
   }
@@ -27,7 +27,7 @@ async function parseJsonResponse(response: Response): Promise<unknown> {
     return await response.json();
   } catch {
     throw new ApiError(
-      "Backend returned invalid JSON — verify the API is running.",
+      "Something went wrong while sending your message. Please try again.",
       response.status
     );
   }
