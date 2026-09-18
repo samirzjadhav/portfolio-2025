@@ -17,7 +17,6 @@ import GitHubStateCard from "../components/GitHubStateCard";
 import GitHubStatsPanel from "../components/GitHubStatsPanel";
 import Navbar from "../components/Navbar";
 import SkipToContent from "../components/SkipToContent";
-import VisitorCounter from "../components/VisitorCounter";
 import { GITHUB_USERNAME } from "../services";
 import { PAGE_META } from "../config/site";
 import { useGitHubData } from "../hooks/useGitHubData";
@@ -84,8 +83,6 @@ export default function GitHub() {
         <SkipToContent />
         <Navbar />
       </div>
-
-      <VisitorCounter />
 
       <main
         id="main-content"

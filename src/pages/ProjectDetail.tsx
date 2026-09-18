@@ -4,7 +4,6 @@ import GitHubStateCard from "../components/GitHubStateCard";
 import Navbar from "../components/Navbar";
 import { ProjectDetailContent } from "../components/project-detail";
 import SkipToContent from "../components/SkipToContent";
-import VisitorCounter from "../components/VisitorCounter";
 import { usePageMeta } from "../hooks/usePageMeta";
 import { useProject } from "../hooks/useProject";
 import { getProjectPageMeta } from "../utils/projectMeta";
@@ -30,7 +29,6 @@ export default function ProjectDetailPage() {
     <div className="min-h-screen text-white">
       <SkipToContent />
       <Navbar />
-      <VisitorCounter />
 
       <main id="main-content" tabIndex={-1} className="pt-[84px] sm:pt-[90px]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">

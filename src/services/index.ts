@@ -12,4 +12,4 @@ export {
   fetchProjectBySlug,
 } from "./projectService";
 export { sendMessage } from "./messageService";
-export { incrementVisitCount } from "./visitorService";
+export { recordVisitOnce } from "./visitorService";

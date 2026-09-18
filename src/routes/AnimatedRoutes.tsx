@@ -3,6 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { Routes, Route, useLocation } from "react-router-dom";
 import App from "../App";
 import Loader from "../components/Loader";
+import VisitorCounter from "../components/VisitorCounter";
 import { PageTransition, useNavigationDirection } from "../motion";
 
 const GitHub = lazy(() => import("../pages/Github"));
@@ -26,6 +27,7 @@ export default function AnimatedRoutes() {
 
   return (
     <>
+      <VisitorCounter />
       <ScrollToTop />
       <AnimatePresence initial={false} mode="sync" custom={direction}>
       <PageTransition

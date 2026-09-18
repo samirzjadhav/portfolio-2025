@@ -1,8 +1,26 @@
-import { useState } from "react";
-import { incrementVisitCount } from "../services";
+import { useEffect, useState } from "react";
+import { recordVisitOnce } from "../services";
 
 export default function VisitorCounter() {
-  const [visits] = useState(incrementVisitCount);
+  const [visits, setVisits] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    recordVisitOnce().then((count) => {
+      if (!cancelled) {
+        setVisits(count);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (visits === null) {
+    return null;
+  }
 
   return (
     <div
@@ -15,7 +33,9 @@ export default function VisitorCounter() {
       "
     >
       👁️ Total Visits:{" "}
-      <span className="text-accent font-semibold">{visits}</span>
+      <span className="text-accent font-semibold">
+        {visits.toLocaleString()}
+      </span>
     </div>
   );
 }

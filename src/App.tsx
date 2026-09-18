@@ -12,7 +12,6 @@ import HomeProjects from "./components/HomeProjects";
 import Footer from "./components/Footer";
 import { SectionTransition } from "./components/sections";
 import SkipToContent from "./components/SkipToContent";
-import VisitorCounter from "./components/VisitorCounter";
 import { PAGE_META } from "./config/site";
 import { usePageMeta } from "./hooks/usePageMeta";
 import { useScrollSpy } from "./hooks/useScrollSpy";
@@ -25,7 +24,6 @@ export default function App() {
     <div className="min-h-screen text-white">
       <SkipToContent />
       <Navbar activeSection={activeSection} />
-      <VisitorCounter />
       <main id="main-content" tabIndex={-1} className="pt-[70px]">
         <Hero />
         <SectionTransition variant="hero-entry" spacing="loose" />

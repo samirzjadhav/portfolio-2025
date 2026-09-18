@@ -4,7 +4,6 @@ import MagneticButton from "../components/MagneticButton";
 import Navbar from "../components/Navbar";
 import ResumePreview from "../components/ResumePreview";
 import SkipToContent from "../components/SkipToContent";
-import VisitorCounter from "../components/VisitorCounter";
 import { PAGE_META } from "../config/site";
 import { achievements } from "../data/achievements";
 import { contactInfo } from "../data/contact";
@@ -58,8 +57,6 @@ export default function ResumePage() {
         <SkipToContent />
         <Navbar />
       </div>
-      <VisitorCounter />
-
       <main
         id="main-content"
         tabIndex={-1}
