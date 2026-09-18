@@ -72,7 +72,7 @@ export default function Skills() {
         subtitle="Technologies & tools I use to build high-quality web experiences."
       />
 
-      <div className="section-content grid md:grid-cols-2 gap-10">
+      <div className="section-content grid md:grid-cols-2 gap-6 md:gap-10">
         <Reveal
           variants={motionVariants.scrollRevealLeft(40)}
           viewport={motionVariants.sectionViewport}
