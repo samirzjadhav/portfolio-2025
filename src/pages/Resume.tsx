@@ -1,14 +1,56 @@
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
-import pdfFile from "../assets/samirzjadhav-resume.pdf";
+import MagneticButton from "../components/MagneticButton";
 import Navbar from "../components/Navbar";
+import ResumePreview from "../components/ResumePreview";
 import SkipToContent from "../components/SkipToContent";
 import VisitorCounter from "../components/VisitorCounter";
 import { PAGE_META } from "../config/site";
+import { achievements } from "../data/achievements";
 import { contactInfo } from "../data/contact";
+import { education } from "../data/education";
+import { workExperience } from "../data/experience";
+import {
+  RESUME_PDF_FILENAME,
+  RESUME_PDF_URL,
+  resumeSkillGroups,
+  resumeSummary,
+} from "../data/resumeContent";
 import { usePageMeta } from "../hooks/usePageMeta";
+import {
+  MotionSection,
+  Reveal,
+  StaggerContainer,
+  useMotionVariants,
+} from "../motion";
+
+interface SectionCardProps {
+  title: string;
+  icon: string;
+  children: ReactNode;
+  delay?: number;
+}
+
+function SectionCard({ title, icon, children, delay = 0 }: SectionCardProps) {
+  return (
+    <MotionSection
+      viewport={{ once: true, amount: 0.2 }}
+      delay={delay}
+      className="glass surface-card p-5 md:p-6"
+    >
+      <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-4">
+        <i className={`bx ${icon} text-accent text-xl`} aria-hidden="true" />
+        {title}
+      </h3>
+      {children}
+    </MotionSection>
+  );
+}
 
 export default function ResumePage() {
   usePageMeta(PAGE_META.resume);
+  const motionVariants = useMotionVariants();
+  const item = motionVariants.fadeUp(14);
 
   return (
     <>
@@ -21,138 +63,189 @@ export default function ResumePage() {
       <main
         id="main-content"
         tabIndex={-1}
-        className="min-h-screen px-6 py-24 md:py-28 
-                      bg-gradient-to-br from-[#07030b] via-[#0f0916] to-[#05020a] 
-                      text-white"
+        className="min-h-screen px-4 sm:px-6 pt-[84px] pb-16 sm:pt-[90px] md:py-28 text-white"
       >
-        <div className="max-w-5xl mx-auto">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold mb-6 text-center"
+        <div className="max-w-6xl mx-auto">
+          <motion.header
+            initial="hidden"
+            animate="visible"
+            variants={motionVariants.stagger(0.1, 0.06)}
+            className="text-center mb-10"
           >
-            My Resume
-          </motion.h1>
-
-          <div className="flex justify-center mb-10">
-            <a
-              href={pdfFile}
-              download="samirjadhav-resume.pdf"
-              className="btn-accent px-6 py-3 rounded-lg"
+            <motion.p
+              variants={item}
+              className="text-sm uppercase tracking-[0.2em] text-accent/90 font-medium"
             >
-              Download Resume (PDF)
-            </a>
+              Resume
+            </motion.p>
+            <motion.h1
+              variants={item}
+              className="mt-2 text-3xl md:text-4xl font-bold"
+            >
+              {contactInfo.name}
+            </motion.h1>
+            <motion.p variants={item} className="mt-2 text-white/65">
+              {contactInfo.title} · {contactInfo.location}
+            </motion.p>
+
+            <motion.div
+              variants={item}
+              className="mt-6 flex flex-col sm:flex-row flex-wrap justify-center gap-3 w-full max-w-md sm:max-w-none mx-auto"
+            >
+              <MagneticButton
+                as="a"
+                href={RESUME_PDF_URL}
+                download={RESUME_PDF_FILENAME}
+                className="btn-accent inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg w-full sm:w-auto"
+              >
+                <i className="bx bx-download text-lg" aria-hidden="true" />
+                Download Resume
+              </MagneticButton>
+              <a
+                href={RESUME_PDF_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary glass gap-2 px-5 py-2.5 text-white/90 hover:text-accent w-full sm:w-auto justify-center"
+              >
+                <i className="bx bx-link-external text-lg" aria-hidden="true" />
+                Open in new tab
+              </a>
+            </motion.div>
+          </motion.header>
+
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-start">
+            <Reveal
+              variants={motionVariants.fadeUp(30)}
+              viewport={{ once: true, amount: 0.15 }}
+              className="glass-strong surface-card surface-card--panel p-3 md:p-4"
+            >
+              <div className="flex items-center justify-between px-2 pb-3 border-b border-white/8">
+                <p className="text-sm font-medium text-white/70">Resume preview</p>
+                <span className="chip text-xs text-white/60">PDF</span>
+              </div>
+              <div className="mt-3 overflow-hidden rounded-xl border border-white/10">
+                <ResumePreview
+                  fileUrl={RESUME_PDF_URL}
+                  title={`${contactInfo.name} resume preview`}
+                />
+              </div>
+            </Reveal>
+
+            <div className="space-y-5">
+              <SectionCard title="Summary" icon="bx-user">
+                <p className="text-sm text-white/75 leading-relaxed">
+                  {resumeSummary}
+                </p>
+              </SectionCard>
+
+              <SectionCard title="Skills" icon="bx-code-alt" delay={0.05}>
+                <StaggerContainer
+                  staggerAmount={0.06}
+                  viewport={{ once: true }}
+                  className="space-y-4"
+                >
+                  {resumeSkillGroups.map((group) => (
+                    <motion.div key={group.title} variants={item}>
+                      <p className="text-xs uppercase tracking-wider text-white/45 mb-2">
+                        {group.title}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {group.items.map((skill) => (
+                          <span key={skill} className="chip text-xs text-white/80">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ))}
+                </StaggerContainer>
+              </SectionCard>
+
+              <SectionCard title="Experience" icon="bx-briefcase" delay={0.08}>
+                <StaggerContainer
+                  staggerAmount={0.08}
+                  viewport={{ once: true }}
+                  className="space-y-5"
+                >
+                  {workExperience.map((entry) => (
+                    <motion.article key={entry.id} variants={item}>
+                      <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <h4 className="font-semibold text-white text-sm">
+                          {entry.role}{" "}
+                          <span className="text-white/40">@</span>{" "}
+                          <span className="text-accent">{entry.company}</span>
+                        </h4>
+                        <time className="text-xs text-white/45">{entry.period}</time>
+                      </div>
+                      <p className="text-xs text-white/40 mt-0.5">{entry.type}</p>
+                      <ul className="mt-2 space-y-1.5">
+                        {entry.responsibilities.map((line) => (
+                          <li
+                            key={line}
+                            className="flex gap-2 text-xs text-white/70 leading-relaxed"
+                          >
+                            <span className="text-accent shrink-0">→</span>
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.article>
+                  ))}
+                </StaggerContainer>
+              </SectionCard>
+
+              <SectionCard title="Education" icon="bx-book-open" delay={0.1}>
+                <StaggerContainer
+                  staggerAmount={0.06}
+                  viewport={{ once: true }}
+                  className="space-y-3"
+                >
+                  {education.map((entry) => (
+                    <motion.div key={entry.id} variants={item}>
+                      <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <p className="font-semibold text-sm text-white">
+                          {entry.degree}
+                        </p>
+                        <time className="text-xs text-white/45">{entry.period}</time>
+                      </div>
+                      <p className="text-sm text-accent mt-0.5">
+                        {entry.institution}
+                      </p>
+                    </motion.div>
+                  ))}
+                </StaggerContainer>
+              </SectionCard>
+
+              <SectionCard title="Achievements" icon="bx-trophy" delay={0.12}>
+                <motion.ul
+                  variants={motionVariants.stagger(0.06)}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  className="space-y-3"
+                >
+                  {achievements.map((entry) => (
+                    <motion.li
+                      key={entry.id}
+                      variants={item}
+                      className="flex gap-3 text-sm"
+                    >
+                      <i
+                        className={`bx ${entry.icon} text-accent text-lg shrink-0 mt-0.5`}
+                        aria-hidden="true"
+                      />
+                      <div>
+                        <p className="font-medium text-white">{entry.title}</p>
+                        <p className="text-xs text-white/60 mt-0.5">
+                          {entry.description}
+                        </p>
+                      </div>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </SectionCard>
+            </div>
           </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="glass p-10 rounded-2xl border border-white/10"
-          >
-            <h2 className="text-2xl font-bold">{contactInfo.name}</h2>
-            <p className="text-white/70">{contactInfo.title}</p>
-
-            <div className="mt-4 text-white/70 space-y-1">
-              <p>📧 {contactInfo.email}</p>
-              <p>📞 {contactInfo.phone}</p>
-              <p>
-                🔗{" "}
-                <a href={contactInfo.portfolioUrl} className="text-accent">
-                  {contactInfo.portfolioUrl.replace(/^https:\/\//, "")}
-                </a>
-              </p>
-              <p>
-                🧑‍💻{" "}
-                <a href={contactInfo.githubUrl} className="text-accent">
-                  {contactInfo.githubUrl.replace(/^https:\/\//, "")}
-                </a>
-              </p>
-              <p>
-                💼{" "}
-                <a href={contactInfo.linkedinUrl} className="text-accent">
-                  {contactInfo.linkedinUrl.replace(/^https:\/\//, "")}
-                </a>
-              </p>
-            </div>
-
-            <hr className="my-6 border-white/10" />
-
-            <h3 className="text-xl font-semibold mb-2">Summary</h3>
-            <p className="text-white/70 leading-relaxed">
-              I'm Samir, a frontend engineer passionate about building clean,
-              engaging and user-friendly web experiences. I'm skilled in React,
-              Next.js, Tailwind, JavaScript, HTML and CSS. I enjoy turning ideas
-              into functional projects and creating impactful UI experiences.
-            </p>
-
-            <hr className="my-6 border-white/10" />
-
-            <h3 className="text-xl font-semibold mb-2">Professional Skills</h3>
-            <div className="text-white/70 leading-relaxed space-y-1">
-              <p>
-                <strong>Technologies:</strong> JavaScript, ReactJS, NextJS,
-                TailwindCSS, HTML, CSS, GSAP, Framer Motion
-              </p>
-              <p>
-                <strong>Comfortable with:</strong> Bash, Git, GitHub, Vercel
-              </p>
-              <p>
-                <strong>Learning:</strong> TypeScript, NodeJS, ExpressJS,
-                MongoDB, Testing
-              </p>
-            </div>
-
-            <hr className="my-6 border-white/10" />
-
-            <h3 className="text-xl font-semibold mb-2">Work Experience</h3>
-            <h4 className="font-bold">Web Engineer @ Propacity (Internship)</h4>
-            <p className="text-white/60">Apr 2024 – Oct 2024</p>
-
-            <ul className="list-disc pl-6 text-white/70 mt-3 space-y-2">
-              <li>
-                Optimised website performance using lazy loading & image
-                optimisation.
-              </li>
-              <li>Developed fully responsive pages across devices.</li>
-              <li>
-                Collaborated with designers to increase product conversion.
-              </li>
-              <li>
-                Refactored UI components for cleaner & reusable architecture.
-              </li>
-              <li>Integrated APIs smoothly with backend engineers.</li>
-              <li>Debugged and resolved UI/UX issues.</li>
-              <li>Worked with Git version control daily.</li>
-            </ul>
-
-            <hr className="my-6 border-white/10" />
-
-            <h3 className="text-xl font-semibold mb-2">Personal Projects</h3>
-            <ul className="list-disc pl-6 text-white/70 space-y-2">
-              <li>Chocolate Milk Brand Landing Page</li>
-              <li>Design Agency Landing Page</li>
-              <li>Zomato Clone</li>
-            </ul>
-
-            <hr className="my-6 border-white/10" />
-
-            <h3 className="text-xl font-semibold mb-2">Achievements</h3>
-            <ul className="list-disc pl-6 text-white/70 space-y-2">
-              <li>Completed GSOC (GirlScript Summer of Code)</li>
-              <li>Completed 100 Days of Code × 2</li>
-              <li>Built 50+ projects</li>
-              <li>50 projects in 50 days challenge (HTML, CSS, JS)</li>
-            </ul>
-
-            <hr className="my-6 border-white/10" />
-
-            <h3 className="text-xl font-semibold mb-2">Education</h3>
-            <p className="text-white/70">
-              Bachelor's in Computer Science (2022–2025)
-            </p>
-            <p className="text-white/60">RTMNU University</p>
-          </motion.div>
         </div>
       </main>
     </>
